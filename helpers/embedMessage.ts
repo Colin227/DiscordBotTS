@@ -1,9 +1,5 @@
 import { EmbedField, EmbedFieldData, MessageEmbed } from "discord.js";
 
-interface fields {
-    name
-}
-
 export default function createEmbedMessage(title: string, description: string, ...args: EmbedFieldData[] ): MessageEmbed {
     console.log('args: ' + JSON.stringify(args))
     const embed = new MessageEmbed()
@@ -11,9 +7,7 @@ export default function createEmbedMessage(title: string, description: string, .
     .setTitle(title)
     .setDescription(description)
     .addFields(
-        
             ...args
-        
     )
     
     return embed;
