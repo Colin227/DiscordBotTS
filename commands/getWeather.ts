@@ -1,14 +1,26 @@
-import * as Weather from "../data/weather";
-const config = require('../utils/environment');
-import WeatherRequest from "../data/weatherRequest";
+import { ApplicationCommandPermissionTypes } from "discord.js/typings/enums";
+// import * as Weather from "../data/weather";
+import dotenv from 'dotenv';
+import Weather from "../data/weather";
 
-type WeatherResponse = typeof Weather;
 
-export default function getWeather<WeatherResponse>(wr: WeatherRequest): Promise<WeatherResponse> {
-    const { location, name } = wr;
-    return fetch(`http://api.weatherapi.com/v1/forecast.json?key=${config.weather_api_token}&q=${location}&days=1&aqi=no&alerts=no`)
+dotenv.config();
+// const config = require('../utils/environment');
+
+
+
+// import WeatherRequest from "../data/weatherRequest";
+
+// type WeatherResponse = typeof Weather;
+
+export default function getWeather<WeatherResponse>(location: string): Promise<WeatherResponse> {
+    return fetch(`http://api.weatherapi.com/v1/forecast.json?key=${process.env.weather_api_token}&q=${location}&days=1&aqi=no&alerts=no`)
         .then(response => {
             if (!response.ok) {
+                // console.log(process.env.weather_api_token);
+                // console.log(location);
+                // console.log(response);
+
                 throw new Error(response.statusText)
             }
             return response.json() as Promise<WeatherResponse>
