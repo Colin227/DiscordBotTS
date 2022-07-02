@@ -6,11 +6,18 @@ const dotenv = require('dotenv');
 dotenv.config();
 // const { clientId, guildId, token } = require('./config.json');
 
+
+// Run this utility when adding or editing slash commands
+
 const commands = [
         new SlashCommandBuilder().setName('ping').setDescription('Replies with pong!'),
         new SlashCommandBuilder().setName('server').setDescription('Replies with server info!'),
         new SlashCommandBuilder().setName('user').setDescription('Replies with user info!'),
         new SlashCommandBuilder().setName('weather').setDescription('Replies with weather forecast!'),
+        new SlashCommandBuilder().setName('stock').setDescription('Replies with stock information!').addStringOption(option =>
+            option.setName('ticker')
+            .setDescription("The stock ticker to send")
+            .setRequired(true))
     ]
     .map(command => command.toJSON());
 

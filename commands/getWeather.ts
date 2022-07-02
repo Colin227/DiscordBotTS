@@ -14,7 +14,7 @@ dotenv.config();
 // type WeatherResponse = typeof Weather;
 
 export default function getWeather<WeatherResponse>(location: string): Promise<WeatherResponse> {
-    return fetch(`http://api.weatherapi.com/v1/forecast.json?key=${process.env.weather_api_token}&q=${location}&days=1&aqi=no&alerts=no`)
+    return fetch(`http://api.weatherapi.com/v1/forecast.json?key=${process.env.weather_api_token}&q=${location}&days=2&aqi=no&alerts=no`)
         .then(response => {
             if (!response.ok) {
                 // console.log(process.env.weather_api_token);

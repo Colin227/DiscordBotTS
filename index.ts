@@ -1,5 +1,5 @@
 import { REST } from '@discordjs/rest';
-import { Client, EmbedFieldData, Intents, MessageEmbed } from 'discord.js';
+import { Client, EmbedFieldData, Intents, MessageActionRow, MessageButton, MessageEmbed } from 'discord.js';
 import dotenv from 'dotenv';
 import getWeather from './commands/getWeather';
 // const { getWeather } = require('./commands/getWeather');
@@ -7,6 +7,9 @@ import getLocation from './helpers/getLocation';
 import Weather from './data/weather';
 import createEmbedMessage from './helpers/embedMessage';
 import embedWeather from './helpers/weatherEmbedder';
+import Stock from './data/stock';
+import getStock from './commands/getStock';
+import embedStock from './helpers/stockEmbedder';
 // type Weather = typeof WeatherResponse;
 dotenv.config();
 
@@ -51,34 +54,27 @@ client.on('interactionCreate', async interaction => {
     } else if (commandName === 'user') {
         await interaction.reply(`User info: ${interaction.user}`);
     } else if (commandName === 'weather') {
-        // // get weather based on the user info.
-        // let location = getLocation(interaction.user);
-        // let weather: Weather = await (getWeather(location));
-        // let resp = createEmbedMessage(`${weather.location.name}`, "Weather", weather.forecast.forecastday[0].date, weather.forecast.forecastday[0].day.avgtemp_c.toString());
-        // // await interaction.reply(`The weather in ${weather.location.name} today is ${weather.current.temp_c} degrees Celsius.`);
-        // await interaction.reply({embeds: [ resp ]});
-        // get weather based on the user info.
-
-
-
-        let weather: Weather = await (getWeather(getLocation(interaction.user)));
-
-        // let location = getLocation(interaction.user);
-        // let weather: Weather = await (getWeather(location));
-
-
-
-        //  const fieldDataArray: EmbedFieldData[] = [
-        //     {
-        //         name: `Date: ${weather.forecast.forecastday[0].date}`, 
-        //         value: `${weather.forecast.forecastday[0].day.avgtemp_c} \u00b0C` 
-        //     }
-
-        // ];
-        // create an embedded message - likely change this function to accept the weather data and format it inside the function
-        //let resp = createEmbedMessage(`${weather.location.name}`, "Weather", ...fieldDataArray);
-        let resp = embedWeather(weather);
-        await interaction.reply({ embeds: [resp] });
+        try {
+            let weather: Weather = await (getWeather(getLocation(interaction.user)));
+            let resp = embedWeather(weather);
+            await interaction.reply({ embeds: [resp] });
+        } catch (e) {
+            await interaction.reply(`An error occurred: ${e.message}`);
+        }
+    } else if (commandName === 'stock') {
+        const stock = interaction.options.getString('ticker');
+        try {
+            const stockResp: any = await (getStock(stock));
+            const stockInfo = stockResp.quoteResponse.result[0];
+            let resp = embedStock(stockInfo);
+            
+            // TODO: move this to an embedStock function.
+            // await interaction.reply(`${stockInfo[0].symbol}: $${stockInfo[0].regularMarketPrice} ${stockInfo[0].currency}`) ;
+            await interaction.reply({ embeds: [resp] });
+        } catch (e) {
+            console.log(e);
+            await interaction.reply(`An error occurred: ${stock} was not found.`);
+        }
     }
 });
 

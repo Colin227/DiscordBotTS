@@ -1,9 +1,11 @@
-import { EmbedField, EmbedFieldData, MessageEmbed } from "discord.js";
+import { ColorResolvable, EmbedField, EmbedFieldData, MessageEmbed } from "discord.js";
 
-export default function createEmbedMessage(title: string, description: string, ...args: EmbedFieldData[] ): MessageEmbed {
+
+// Unsure if the ColorResolvable type is going to work here. I had it as a string before updating for dynamic color values.
+export default function createEmbedMessage(color: ColorResolvable, title: string, description?: string, thumbnail?: string, ...args: EmbedFieldData[] ): MessageEmbed {
     console.log('args: ' + JSON.stringify(args))
     const embed = new MessageEmbed()
-    .setColor('#00099ff')
+    .setColor(color)
     .setTitle(title)
     .setDescription(description)
     .addFields(
