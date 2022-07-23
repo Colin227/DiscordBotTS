@@ -2,10 +2,10 @@ import { ColorResolvable, EmbedField, EmbedFieldData, MessageEmbed } from "disco
 
 
 // Unsure if the ColorResolvable type is going to work here. I had it as a string before updating for dynamic color values.
-export default function createEmbedMessage(color: ColorResolvable, title: string, description?: string, thumbnail?: string, ...args: EmbedFieldData[] ): MessageEmbed {
+export default function createEmbedMessage(color: string, title: string, description?: string, thumbnail?: string, ...args: EmbedFieldData[] ): MessageEmbed {
     console.log('args: ' + JSON.stringify(args))
     const embed = new MessageEmbed()
-    .setColor(color)
+    .setColor(color as ColorResolvable) // Not sure if this works...
     .setTitle(title)
     .setDescription(description)
     .addFields(

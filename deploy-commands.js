@@ -17,7 +17,8 @@ const commands = [
         new SlashCommandBuilder().setName('stock').setDescription('Replies with stock information!').addStringOption(option =>
             option.setName('ticker')
             .setDescription("The stock ticker to send")
-            .setRequired(true))
+            .setRequired(true)),
+        new SlashCommandBuilder().setName('goodmorning').setDescription('Replies with a good morning message!')
     ]
     .map(command => command.toJSON());
 

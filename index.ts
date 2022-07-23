@@ -1,5 +1,5 @@
 import { REST } from '@discordjs/rest';
-import { Client, EmbedFieldData, Intents, MessageActionRow, MessageButton, MessageEmbed } from 'discord.js';
+import { Client, EmbedFieldData, GuildMember, Intents, MessageActionRow, MessageButton, MessageEmbed } from 'discord.js';
 import dotenv from 'dotenv';
 import getWeather from './commands/getWeather';
 // const { getWeather } = require('./commands/getWeather');
@@ -10,29 +10,10 @@ import embedWeather from './helpers/weatherEmbedder';
 import Stock from './data/stock';
 import getStock from './commands/getStock';
 import embedStock from './helpers/stockEmbedder';
-// type Weather = typeof WeatherResponse;
+import goodMorning from './commands/goodMorning';
+import morningMessage from './helpers/getMorningMessage';
+
 dotenv.config();
-
-
-
-// const commands = [{
-//     name: 'ping',
-//     description: 'Replies with Pong!',
-// }, ];
-
-// const rest = new REST({ version: '10' }).setToken(process.env.api_token);
-
-// (async() => {
-//     try {
-//         console.log('Started refreshing application (/) commands.');
-
-//         await rest.put(Routes.applicationGuildCommands(CLIENT_ID, GUILD_ID), { body: commands });
-
-//         console.log('Successfully reloaded application (/) commands.');
-//     } catch (error) {
-//         console.error(error);
-//     }
-// })();
 
 // Create a new client instance
 const client = new Client({ intents: [Intents.FLAGS.GUILDS] });
@@ -67,13 +48,23 @@ client.on('interactionCreate', async interaction => {
             const stockResp: any = await (getStock(stock));
             const stockInfo = stockResp.quoteResponse.result[0];
             let resp = embedStock(stockInfo);
-            
-            // TODO: move this to an embedStock function.
-            // await interaction.reply(`${stockInfo[0].symbol}: $${stockInfo[0].regularMarketPrice} ${stockInfo[0].currency}`) ;
             await interaction.reply({ embeds: [resp] });
         } catch (e) {
             console.log(e);
             await interaction.reply(`An error occurred: ${stock} was not found.`);
+        }
+    } else if (commandName === 'goodmorning') {
+        try {
+            let weather: Weather = await (goodMorning(getLocation(interaction.user)));
+            
+
+
+            //console.log(interaction.member?.nickname || interaction.member?.nick);
+            let resp = morningMessage(weather, interaction.user);
+            await interaction.reply(resp);
+        } catch (e) {
+            console.log(e);
+            await interaction.reply(`An error occurred: contact Mat Langer for support.`);
         }
     }
 });
