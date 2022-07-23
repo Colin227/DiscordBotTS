@@ -4,10 +4,14 @@ import Stock from "../data/stock";
 
 export default function embedStock(stock: Stock): MessageEmbed {
     const dailyChange = () => {
-        return Math.sign(stock.regularMarketChange) > 0 ? `+${stock.regularMarketChange}` : `${stock.regularMarketChange.toFixed(2)}`;
+        return Math.sign(stock.regularMarketChange) > 0 ? `+${stock.regularMarketChange.toFixed(2)}` : `${stock.regularMarketChange.toFixed(2)}`;
     }
+    const stockColor = () => {
+        return Math.sign(stock.regularMarketChange) > 0 ? "#00AD2A" : "#ff0000";
+    }
+
     const embed = new MessageEmbed()
-    .setColor('#ffe333')
+    .setColor(stockColor())
     .setTitle(`${stock.longName}`)
     .setDescription(`${stock.symbol}`)
     // .setThumbnail(`https:${weather.current.condition.icon}`)
