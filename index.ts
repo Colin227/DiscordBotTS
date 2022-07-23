@@ -12,6 +12,7 @@ import getStock from './commands/getStock';
 import embedStock from './helpers/stockEmbedder';
 import goodMorning from './commands/goodMorning';
 import morningMessage from './helpers/getMorningMessage';
+import getHelp from './commands/getHelp';
 
 dotenv.config();
 
@@ -51,7 +52,7 @@ client.on('interactionCreate', async interaction => {
             await interaction.reply({ embeds: [resp] });
         } catch (e) {
             console.log(e);
-            await interaction.reply(`An error occurred: ${stock} was not found.`);
+            await interaction.reply(`An error occurred: ${stock} was not found. Contact your local Mat Langer for assistance.`);
         }
     } else if (commandName === 'goodmorning') {
         try {
@@ -62,6 +63,14 @@ client.on('interactionCreate', async interaction => {
             //console.log(interaction.member?.nickname || interaction.member?.nick);
             let resp = morningMessage(weather, interaction.user);
             await interaction.reply(resp);
+        } catch (e) {
+            console.log(e);
+            await interaction.reply(`An error occurred: contact Mat Langer for support.`);
+        }
+    } else if (commandName === 'help') {
+        try {
+            let helpEmbed = getHelp();
+            await interaction.reply({ embeds: [helpEmbed]});
         } catch (e) {
             console.log(e);
             await interaction.reply(`An error occurred: contact Mat Langer for support.`);

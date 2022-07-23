@@ -18,7 +18,8 @@ const commands = [
             option.setName('ticker')
             .setDescription("The stock ticker to send")
             .setRequired(true)),
-        new SlashCommandBuilder().setName('goodmorning').setDescription('Replies with a good morning message!')
+        new SlashCommandBuilder().setName('goodmorning').setDescription('Replies with a good morning message!'),
+        new SlashCommandBuilder().setName('help').setDescription("Replies with a list of all commands.")
     ]
     .map(command => command.toJSON());
 
