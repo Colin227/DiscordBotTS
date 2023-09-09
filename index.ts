@@ -56,12 +56,13 @@ client.on('interactionCreate', async interaction => {
         }
     } else if (commandName === 'goodmorning') {
         try {
+            let guild = await client.guilds.fetch(process.env.channel_id);
+            let guildMember = await guild.members.fetch(interaction.user);
+            let nickname = guildMember?.nickname || interaction.user;
             let weather: Weather = await (goodMorning(getLocation(interaction.user)));
             
 
-
-            //console.log(interaction.member?.nickname || interaction.member?.nick);
-            let resp = morningMessage(weather, interaction.user);
+            let resp = morningMessage(weather, nickname);
             await interaction.reply(resp);
         } catch (e) {
             console.log(e);
