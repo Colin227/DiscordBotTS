@@ -10,10 +10,13 @@ import * as users from "../data/users.json";
 */
 export default function getLocation(user: User): string {
     console.log(`User tag = ${user.tag}`);
+    // console.log(`User username = ${user.username}`);
+    // console.log(user);
     for (const [key, value] of Object.entries(users)){
         if (value.userId === user.tag){
             return value.location;
         }
     }
-    return "No location found.";
+    throw new Error(`No Location found for ${user.tag}`);
+    // return "No location found.";
 }

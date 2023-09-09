@@ -5,7 +5,8 @@
     "main": "./dist/index.js",
     "scripts": {
         "build": "tsc",
-        "start": "node"
+        "start": "node",
+        "redeploy": "pm2 restart index --update-env"
     },
     "author": "Colin Peterson",
     "license": "ISC",
