@@ -65,7 +65,7 @@ client.on('interactionCreate', async interaction => {
             await interaction.reply(resp);
         } catch (e) {
             console.log(e);
-            await interaction.reply(`An error occurred: contact Mat Langer for support.`);
+            await interaction.reply(`An error occurred: contact Mat Langer for support. ${e.message}`);
         }
     } else if (commandName === 'help') {
         try {
