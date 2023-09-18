@@ -2,27 +2,63 @@ import { SlashCommandBuilder } from "@discordjs/builders";
 import { BaseCommandInteraction } from "discord.js";
 import getGames from "./getHockey";
 import embedScore from "../helpers/hockeyEmbedder";
+import { Game, Root } from "../data/game";
+
+const GAME_LIMIT = 3;
 
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('leafs')
         .setDescription('Replies with Leafs game stat'),
     async execute(interaction: BaseCommandInteraction) {
-        const test_game = "2020020001";
+        // const test_game = "2020020001";
 
         await interaction.deferReply();
 
-        const resp = await getGames();
+        const resp = await getGames() as Root;
 
-        console.log('resp: ', resp);
 
-        let embed = embedScore(resp.dates[0]);
 
-        // let resp = embedWeather(weather);
-            // await interaction.reply({ embeds: [resp] });
+        if (resp.dates !== undefined && resp.dates.length > 0) {
 
-        // await interaction.editReply(`leafs win woo:ubbyvy ${resp.dates[0].date}`);
-        await interaction.editReply({ embeds: [embed] })
+            let embeds = [];
+
+            console.log('resp: ', resp);
+
+            let gameDates = resp.dates;
+
+            for (const [i, day] of gameDates.entries()) {
+                
+                if (i >= GAME_LIMIT) break;
+                
+
+                if (day.totalGames > 0) {
+
+                
+
+
+
+                console.log("destructuring root into game day: ", day);
+
+                let embed = embedScore(day.games[0]);
+
+                embeds.push(embed);
+
+                }
+
+
+                // let resp = embedWeather(weather);
+                // await interaction.reply({ embeds: [resp] });
+
+                // await interaction.editReply(`leafs win woo:ubbyvy ${resp.dates[0].date}`);
+
+            }
+console.log('embeds ========= : ', embeds);
+
+            await interaction.editReply({ embeds })
         
+        } else {
+            await interaction.editReply("No games found.");
+        }
     }
 }

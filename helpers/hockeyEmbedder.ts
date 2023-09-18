@@ -1,4 +1,5 @@
 import { MessageEmbed } from "discord.js";
+import { Game } from "../data/game";
 
 
 export interface GameDay {
@@ -39,32 +40,28 @@ export interface GameDay {
  */
 
 // TODO: Typing 
-export default function embedScore(gameDay: GameDay): MessageEmbed {
-    // if (gameDay.totalGames < 1) {
-    //     return embed;
-    // }
-    // TODO: handle no games on the provided day
+export default function embedScore(game: Game): MessageEmbed {
 
-    console.log('game home team: ', gameDay.games[0].teams.home);
 
-    
+
+    console.log("=== GAMEDAY === :", game);
 
     const embed = new MessageEmbed()
     .setColor('#00205B')
-    .setTitle(`${gameDay.date}`)
+    .setTitle(`${game.gameDate}`)
     .setDescription("description here")
     // .setThumbnail(``)
     .addFields(
             [
                 {
-                    name: `${gameDay.games[0].teams.home.team.name}`,
-                    value: `${gameDay.games[0].teams.home.score}`,
+                    name: `${game?.teams?.home.team.name}`,
+                    value: `${game?.teams?.home.score}`,
                     // inline: true
                     // value: `${weather.forecast.forecastday[0].day.avgtemp_c} \u00b0C` 
                 },
                 {
-                    name: `${gameDay.games[0].teams.away.team.name}`,
-                    value: `${gameDay.games[0].teams.away.score}`,
+                    name: `${game.teams?.away.team.name}`,
+                    value: `${game.teams?.away.score}`,
                     // inline: true
                     // value: `${weather.forecast.forecastday[0].day.avgtemp_c} \u00b0C` 
                 },
