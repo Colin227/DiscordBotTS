@@ -1,7 +1,7 @@
 import { ApplicationCommandPermissionTypes } from "discord.js/typings/enums";
 // import * as Weather from "../data/weather";
 import dotenv from 'dotenv';
-import Weather from "../data/weather";
+import Weather from "../../data/weather";
 
 
 dotenv.config();

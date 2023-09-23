@@ -1,7 +1,7 @@
 import { REST } from '@discordjs/rest';
-import { Client, EmbedFieldData, GuildMember, Intents, MessageActionRow, MessageButton, MessageEmbed } from 'discord.js';
+import { Client, ClientOptions, Collection, EmbedFieldData, GuildMember, Intents, MessageActionRow, MessageButton, MessageEmbed, BaseCommandInteraction } from 'discord.js';
 import dotenv from 'dotenv';
-import getWeather from './commands/getWeather';
+import getWeather from './commands/_commands/getWeather';
 // const { getWeather } = require('./commands/getWeather');
 import getLocation from './helpers/getLocation';
 import Weather from './data/weather';
@@ -12,24 +12,63 @@ import getStock from './commands/getStock';
 import embedStock from './helpers/stockEmbedder';
 import goodMorning from './commands/goodMorning';
 import morningMessage from './helpers/getMorningMessage';
-import getHelp from './commands/getHelp';
+import getHelp from './commands/_commands/getHelp';
+import fs from 'node:fs';
+import path from 'node:path';
+import { ClientC } from './utils/ClientExtended';
 
 dotenv.config();
 
+
 // Create a new client instance
-const client = new Client({ intents: [Intents.FLAGS.GUILDS] });
+const client = new ClientC({ intents: [Intents.FLAGS.GUILDS] });
 
 // When the client is ready, run this code (only once)
 client.once('ready', () => {
     console.log('Ready!');
 });
 
+
+const commandsPath = path.join(__dirname, 'commands');
+const commandFiles = fs.readdirSync(commandsPath).filter(file => file.endsWith('.js'));
+
+for (const file of commandFiles) {
+    const filePath = path.join(commandsPath, file);
+    const command = require(filePath);
+    // Set a new item in the Collection with the key as the command name
+    if ('data' in command && 'execute' in command) {
+        client.commands.set(command.data.name, command);
+    } else {
+        console.log(`[WARNING] the command at ${filePath} is missing a required "data" or "execute" property.`);
+    }
+}
+
+client.on('interactionCreate', async interaction => {
+    if (!interaction.isCommand()) return;
+
+    const interactionClient = interaction.client as ClientC;
+    const command: any = interactionClient.commands.get(interaction.commandName);
+    
+    if (!command) {
+        console.error(`No command matching ${interaction.commandName} was found!`);
+        return;
+    }
+
+    try {
+        await command.execute(interaction)
+    } catch (e: any) {
+        console.log('caught error in index: ', e);
+    }
+    
+    console.log(interaction);
+})
+
 client.on('interactionCreate', async interaction => {
     if (!interaction.isCommand()) return;
 
     const { commandName } = interaction;
 
-    if (commandName === 'ping') {
+    if (commandName === 'pinggg') {
         await interaction.reply('Pong!');
     } else if (commandName === 'server') {
         await interaction.reply(`Server name: ${interaction.guild?.name}`);

@@ -5,14 +5,16 @@
     "main": "./dist/index.js",
     "scripts": {
         "build": "tsc",
-        "start": "node",
-        "redeploy": "pm2 restart index --update-env"
+        "start": "node ./dist/index.js",
+        "redeploy": "pm2 restart index --update-env",
+        "debug": "npm run build && npm run start"
     },
     "author": "Colin Peterson",
     "license": "ISC",
     "dependencies": {
         "@discordjs/builders": "^0.15.0",
         "@discordjs/rest": "^0.5.0",
+        "dayjs": "^1.11.10",
         "discord-api-types": "^0.35.0",
         "discord.js": "^13.8.0",
         "dotenv": "^16.0.1"
