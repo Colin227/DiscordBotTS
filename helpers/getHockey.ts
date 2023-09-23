@@ -1,27 +1,46 @@
-// import { config } from('../utils/environment');
-import { User } from "discord.js";
-import WeatherRequest from "../data/weatherRequest";
-import * as users from "../data/users.json";
+import dotenv from 'dotenv';
+import { Root, Game } from '../data/game';
+import { Boxscore } from '../data/_interfaces';
 
-/***
-* Gets the  as a string from the
-* users.JSON file. 
-* @return string This is the postal code or long/lat of the user's location.
-*/
-export default function getScore(game: any): any{
-    console.log(`hockey score here`);
-    // console.log(`User username = ${user.username}`);
-    // console.log(user);
-    // for (const [key, value] of Object.entries(users)){
-    //     if (value.userId === user.tag){
-    //         return value.location;
-    //     }
-    // }
+const test_game = "2020020001";
+
+// Date param is placeholder for development. 
+// If not included, returns today's game if any.
+// const leafsGameUrl = "https://statsapi.web.nhl.com/api/v1/schedule?teamId=10&startate=2018-01-04";
 
 
 
 
+// dotenv.config();
 
-    throw new Error(`No game found for ${game}`);
-    // return "No location found.";
+export default function getGames<Boxscore>(teamAbbr: string): Promise<Boxscore> {
+    // let today = new Date();
+    // let lastWeek = new Date();
+    // lastWeek.setDate(new Date().getDate() - 7);
+
+    // const year = today.getFullYear();
+    // const prevYear = lastWeek.getFullYear();
+    // const month = today.getMonth();
+    // const prevMonth = lastWeek.getMonth();
+    // const day = today.getDate();
+    // const prevDay = lastWeek.getDate();
+
+    // let currentDate = `${year}-${month}-${day}`;
+    // let prevDate = `${prevYear}-${prevMonth}-${prevDay}`;
+
+    // const leafsGameUrl = "https://api-web.nhle.com/v1/gamecenter/2022030411/boxscore";
+    const teamGamesUrl = `https://api-web.nhle.com/v1/scoreboard/${teamAbbr}/now`
+    return fetch(teamGamesUrl)
+        .then(response => {
+            if (!response.ok) {
+                // console.log(process.env.weather_api_token);
+                // console.log(location);
+                console.log("======= RESPONSE INVALID =======", response);
+
+                throw new Error(response.statusText)
+            }
+            // Confirm that this is parsing the response data correctly. 
+            //This looks like it is returning the entire response, not just the game data.
+            return response.json();
+        })
 }

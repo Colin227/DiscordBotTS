@@ -1,41 +1,50 @@
 import { SlashCommandBuilder } from "@discordjs/builders";
-import { BaseCommandInteraction } from "discord.js";
+import { BaseCommandInteraction, CommandInteraction } from "discord.js";
 import getGames from "../helpers/getHockey";
 import embedScore from "../helpers/hockeyEmbedder";
 import { Game, Root } from "../data/game";
-import { Boxscore } from "../data/_interfaces";
+import { Boxscore, GameSchedule } from "../data/_interfaces";
 import hockeyEmbedder from "../helpers/hockeyEmbedder";
+import * as TEAMS from '../data/teams.json';
 
 const GAME_LIMIT = 3;
 
+const Teams = TEAMS;
+
+const teamChoices = Teams.data.slice(0, 25).map((
+    team) => {
+        return {
+            name: team.fullName,
+            value: team.triCode
+        }
+    }
+    );
+
 module.exports = {
     data: new SlashCommandBuilder()
-        .setName('leafs')
-        .setDescription('Replies with Leafs game stat')
+        .setName('hockey')
+        .setDescription('Replies with hockey game schedule.')
         // .addUserOption(option =>
 		// 	option
 		// 		.setName('Team')
 		// 		.setDescription('Team Abbreviation: i.e. "TOR" ')
 		// 		.setRequired(true))
-		.addStringOption((option) =>
+		.addUserOption((option) =>
 			option.setName('team')
 				.setDescription('Team abbreviation i.e. "TOR  SEA')
                 .setRequired(true)
-                .addChoices(
-					{ name: 'Leafs', value: 'TOR' },
-					{ name: 'Kraken', value: 'SEA' },
-				)
         ),
-    async execute(interaction: BaseCommandInteraction) {
+    async execute(interaction: CommandInteraction) {
         // const test_game = "2020020001";
-        const team = interaction.options.get('team');
+        const team = interaction.options.getString('team');
+        console.log("team: ", team)
         await interaction.deferReply();
 
-        const score = await getGames() as Boxscore;
+        const score = await getGames(team.trim().toLowerCase()) as GameSchedule;
 
         console.log("============ resp: ", score);
 
-        if (score.id > 0) { // TODO: 
+        if (score) { // TODO: 
 
             let embeds = [];
 
