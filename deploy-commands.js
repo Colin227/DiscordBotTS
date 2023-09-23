@@ -2,10 +2,15 @@ const { SlashCommandBuilder } = require('@discordjs/builders');
 const { REST } = require('@discordjs/rest');
 const { Routes } = require('discord-api-types/v9');
 const dotenv = require('dotenv');
+const fs = require('node:fs');
+const path = require('node:path');
 
 dotenv.config();
 // const { clientId, guildId, token } = require('./config.json');
 
+
+// const foldersPath = path.join(__dirname, 'commands');
+// const commandFolders = fs.readdirSync(foldersPath);
 
 // Run this utility when adding or editing slash commands
 
@@ -18,7 +23,11 @@ const commands = [
             option.setName('ticker')
             .setDescription("The stock ticker to send")
             .setRequired(true)),
-        new SlashCommandBuilder().setName('leafs').setDescription('Replies with leafs!'),
+        new SlashCommandBuilder().setName('hockey').setDescription('Replies with hockey schedule!').addStringOption((option) =>
+        option.setName('team')
+            .setDescription('Team abbreviation i.e. "TOR  SEA')
+            .setRequired(true)
+    ),
         new SlashCommandBuilder().setName('goodmorning').setDescription('Replies with a good morning message!'),
         new SlashCommandBuilder().setName('help').setDescription("Replies with a list of all commands.")
     ]
