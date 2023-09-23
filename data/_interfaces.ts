@@ -198,3 +198,169 @@ export interface TvBroadcast {
     countryCode: string;
     network:     string;
 }
+
+
+// Scoreboard endpoint
+
+export interface Scoreboard {
+    id:                number;
+    season:            number;
+    gameType:          number;
+    gameDate:          Date;
+    venue:             string;
+    startTimeUTC:      Date;
+    easternUTCOffset:  string;
+    venueUTCOffset:    string;
+    tvBroadcasts:      TvBroadcast[];
+    gameState:         string;
+    gameScheduleState: string;
+    period:            number;
+    awayTeam:          Team;
+    homeTeam:          Team;
+    clock:             Clock;
+    rosterSpots:       RosterSpot[];
+    displayPeriod:     number;
+    gameOutcome:       GameOutcome;
+    plays:             Play[];
+}
+
+export interface Team {
+    id:     number;
+    name:   string;
+    abbrev: string;
+    score:  number;
+    sog:    number;
+    logo:   string;
+    onIce:  any[];
+}
+
+export interface Clock {
+    timeRemaining:    string;
+    secondsRemaining: number;
+    running:          boolean;
+    inIntermission:   boolean;
+}
+
+export interface GameOutcome {
+    lastPeriodType: string;
+}
+
+export interface Play {
+    eventId:               number;
+    period:                number;
+    timeInPeriod:          string;
+    timeRemaining:         string;
+    situationCode?:        string;
+    homeTeamDefendingSide: HomeTeamDefendingSide;
+    typeCode:              number;
+    typeDescKey:           TypeDescKey;
+    sortOrder:             number;
+    details?:              Details;
+}
+
+export interface Details {
+    eventOwnerTeamId?:    number;
+    losingPlayerId?:      number;
+    winningPlayerId?:     number;
+    xCoord?:              number;
+    yCoord?:              number;
+    zoneCode?:            Market;
+    hittingPlayerId?:     number;
+    hitteePlayerId?:      number;
+    blockingPlayerId?:    number;
+    shootingPlayerId?:    number;
+    reason?:              string;
+    playerId?:            number;
+    shotType?:            ShotType;
+    goalieInNetId?:       number;
+    awaySOG?:             number;
+    homeSOG?:             number;
+    secondaryReason?:     SecondaryReason;
+    typeCode?:            TypeCode;
+    descKey?:             string;
+    duration?:            number;
+    committedByPlayerId?: number;
+    drawnByPlayerId?:     number;
+    scoringPlayerId?:     number;
+    assist1PlayerId?:     number;
+    awayScore?:           number;
+    homeScore?:           number;
+    assist2PlayerId?:     number;
+    servedByPlayerId?:    number;
+}
+
+export enum SecondaryReason {
+    ChlgVisMissedStoppage = "chlg-vis-missed-stoppage",
+    RinkRepair = "rink-repair",
+    TvTimeout = "tv-timeout",
+}
+
+export enum ShotType {
+    Backhand = "backhand",
+    Deflected = "deflected",
+    Poke = "poke",
+    Slap = "slap",
+    Snap = "snap",
+    TipIn = "tip-in",
+    WrapAround = "wrap-around",
+    Wrist = "wrist",
+}
+
+export enum TypeCode {
+    Ben = "BEN",
+    MIS = "MIS",
+    Min = "MIN",
+}
+
+export enum Market {
+    D = "D",
+    N = "N",
+    O = "O",
+}
+
+export enum HomeTeamDefendingSide {
+    Left = "left",
+    Right = "right",
+}
+
+export enum TypeDescKey {
+    BlockedShot = "blocked-shot",
+    DelayedPenalty = "delayed-penalty",
+    Faceoff = "faceoff",
+    GameEnd = "game-end",
+    Giveaway = "giveaway",
+    Goal = "goal",
+    Hit = "hit",
+    MissedShot = "missed-shot",
+    Penalty = "penalty",
+    PeriodEnd = "period-end",
+    PeriodStart = "period-start",
+    ShotOnGoal = "shot-on-goal",
+    Stoppage = "stoppage",
+    Takeaway = "takeaway",
+}
+
+export interface RosterSpot {
+    teamId:        number;
+    playerId:      number;
+    firstName:     string;
+    lastName:      string;
+    sweaterNumber: number;
+    positionCode:  PositionCode;
+    headshot:      string;
+}
+
+export enum PositionCode {
+    C = "C",
+    D = "D",
+    G = "G",
+    L = "L",
+    R = "R",
+}
+
+export interface TvBroadcast {
+    id:          number;
+    market:      string; // TODO: This was originally of type Market 
+    countryCode: string;
+    network:     string;
+}
