@@ -1,24 +1,8 @@
 import { SlashCommandBuilder } from "@discordjs/builders";
-import { BaseCommandInteraction, CommandInteraction } from "discord.js";
+import { CommandInteraction } from "discord.js";
 import getGames from "../helpers/getHockey";
-import embedScore from "../helpers/hockeyEmbedder";
-import { Game, Root } from "../data/game";
-import { Boxscore, GameSchedule } from "../data/_interfaces";
+import { GameSchedule } from "../data/_interfaces";
 import hockeyEmbedder from "../helpers/hockeyEmbedder";
-import * as TEAMS from '../data/teams.json';
-
-const GAME_LIMIT = 3;
-
-const Teams = TEAMS;
-
-const teamChoices = Teams.data.slice(0, 25).map((
-    team) => {
-    return {
-        name: team.fullName,
-        value: team.triCode
-    }
-}
-);
 
 module.exports = {
     data: new SlashCommandBuilder()
