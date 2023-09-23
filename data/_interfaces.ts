@@ -364,3 +364,60 @@ export interface TvBroadcast {
     countryCode: string;
     network:     string;
 }
+
+export interface GameSchedule {
+    focusedDate:      Date;
+    focusedDateCount: number;
+    clubTimeZone:     string;
+    clubUTCOffset:    string;
+    clubScheduleLink: string;
+    gamesByDate:      GamesByDate[];
+}
+
+export interface GamesByDate {
+    date:  Date;
+    games: Game[];
+}
+
+export interface Game {
+    id:                number;
+    season:            number;
+    gameType:          number;
+    gameDate:          Date;
+    gameCenterLink:    string;
+    venue:             string;
+    startTimeUTC:      Date;
+    easternUTCOffset:  string;
+    venueUTCOffset:    string;
+    tvBroadcasts:      TvBroadcast[];
+    gameState:         string;
+    gameScheduleState: string;
+    awayTeam:          Team;
+    homeTeam:          Team;
+    ticketsLink:       string;
+}
+
+export interface Team {
+    id:     number;
+    name:   string;
+    abbrev: string;
+    logo:   string;
+}
+
+export interface TvBroadcast {
+    id:          number;
+    market:      string;
+    countryCode: string;
+    network:     string;
+}
+
+export enum CountryCode {
+    CA = "CA",
+    Us = "US",
+}
+
+// export enum Market {
+//     A = "A",
+//     H = "H",
+//     N = "N",
+// }

@@ -1,7 +1,7 @@
 import { REST } from '@discordjs/rest';
 import { Client, ClientOptions, Collection, EmbedFieldData, GuildMember, Intents, MessageActionRow, MessageButton, MessageEmbed, BaseCommandInteraction } from 'discord.js';
 import dotenv from 'dotenv';
-import getWeather from './commands/getWeather';
+import getWeather from './commands/_commands/getWeather';
 // const { getWeather } = require('./commands/getWeather');
 import getLocation from './helpers/getLocation';
 import Weather from './data/weather';
@@ -12,7 +12,7 @@ import getStock from './commands/getStock';
 import embedStock from './helpers/stockEmbedder';
 import goodMorning from './commands/goodMorning';
 import morningMessage from './helpers/getMorningMessage';
-import getHelp from './commands/getHelp';
+import getHelp from './commands/_commands/getHelp';
 import fs from 'node:fs';
 import path from 'node:path';
 import { ClientC } from './utils/ClientExtended';
