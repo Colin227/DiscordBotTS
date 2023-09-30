@@ -28,7 +28,7 @@ module.exports = {
             // Get the team logo from stored assets.
             const teamFile = new MessageAttachment(`../Discordjs/assets/teams/${t.triCode}_light.png`);
 
-            await interaction.editReply({ embeds: [hockeyEmbedder(score, t.triCode)], files: [teamFile] })
+            await interaction.editReply({ embeds: [hockeyEmbedder(score, t)], files: [teamFile] })
         } catch (e) {
             await interaction.editReply("Error getting game data, try again later.");
         }

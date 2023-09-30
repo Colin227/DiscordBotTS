@@ -1,5 +1,5 @@
-import { MessageEmbed } from "discord.js";
-import { GameSchedule } from "../data/_interfaces";
+import { ColorResolvable, MessageEmbed } from "discord.js";
+import { GameSchedule, Team } from "../data/_interfaces";
 import dayjs from "dayjs";
 import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
@@ -10,7 +10,15 @@ dayjs.extend(timezone);
 
 const tz = "America/Toronto";
 
-export default function embedScore(sched: GameSchedule, teamTriCode: string): MessageEmbed {
+// Values for game states, used to determine if a score should be shown.
+const gameStates = [
+  'FINAL',
+  'LIVE',
+  'CRIT',
+  'OFF'
+]
+
+export default function embedScore(sched: GameSchedule, team: Team): MessageEmbed {
   const { 
     gamesByDate,
 } = sched;
@@ -25,7 +33,7 @@ for (let game of gamesByDate) {
 
   const date = gameLocal.format('MM/DD h:mmA')
 
-  if (g.gameState === 'FINAL') {
+  if (gameStates.includes(g.gameState)) {
     gameValue = `${g.awayTeam.score} - ${g.homeTeam.score}`;
   } else {
     gameValue = date;
@@ -35,9 +43,9 @@ for (let game of gamesByDate) {
 }
 
     const embed = new MessageEmbed()
-    .setColor('#00205B')
-    .setTitle(`${teamTriCode} Schedule`)
-    .setThumbnail(`attachment://${teamTriCode}_light.png`)
+    .setColor(team.color as ColorResolvable) // TODO: Check this casting type
+    .setTitle(`${team.triCode} Schedule`)
+    .setThumbnail(`attachment://${team.triCode}_light.png`)
     .addFields(fields)
     return embed;
 }
