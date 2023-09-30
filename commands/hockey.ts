@@ -18,18 +18,16 @@ module.exports = {
         const team = interaction.options.getString('team');
         const teamStr = team.trim().toLowerCase();
         await interaction.deferReply();
-        // try {
-        //     const t = getTeam(teamStr);
-        //     const teamFile = new MessageAttachment(`../Discordjs/assets/teams/${t.triCode}_light.png`);
-        //     await interaction.editReply({ embeds: [teamEmbedder(t)], files: [teamFile]});
-        // } catch (e) {
-        //     await interaction.editReply(`Error getting game data, try again later: ${e}`);
-        // }
         
         try {
-            const score = await getGames(team.trim().toLowerCase()) as GameSchedule;
+            // Get the team data based on the user provided tricode.
             const t = getTeam(teamStr);
+            // Get the current game schedule
+            // TODO: Unsure how the NHL api will handle this once preseason is over. Does the api return every game in the season? 
+            const score = await getGames(t.triCode) as GameSchedule;
+            // Get the team logo from stored assets. These aren't stored on git due to the logos being copyright of their respective teams.
             const teamFile = new MessageAttachment(`../Discordjs/assets/teams/${t.triCode}_light.png`);
+            
             await interaction.editReply({ embeds: [hockeyEmbedder(score, t.triCode)], files: [teamFile] })
         } catch (e) {
             await interaction.editReply("Error getting game data, try again later.");
