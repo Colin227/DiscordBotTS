@@ -1,6 +1,27 @@
+import dayjs from "dayjs";
+import utc from 'dayjs/plugin/utc';
+import timezone from 'dayjs/plugin/timezone';
 import { Game, Team } from "../data/_interfaces";
+import { gameStates } from "./hockeyEmbedder";
+dayjs.extend(utc);
+dayjs.extend(timezone);
 
-const getHockeyTemplate = (game: Game, primaryTeam: Team) => {
+const getHockeyTemplate = (games: Game[], primaryTeam: Team) => {
+    let gameScores: string = '';
+    for (let game of games) {
+        gameScores += `  <div class="parent">
+        <div class="teamAwayLogo"><img src='${game.awayTeam.logo}' class='logo'></div>
+        <div class="logoSpacer">@</div>
+        <div class="teamHomeLogo"><img src='${game.homeTeam.logo}' class='logo'></div>
+        <div class="teamAwayName">${game.awayTeam.name}</div>
+        <div class="teamNameSpacer"></div>
+        <div class="teamHomeName">${game.homeTeam.name}</div>
+        <div class="teamAwayDetails"><span class="score">${game.awayTeam?.score || '-'}</span></div>
+        <div class="teamDetailsSpacer">${gameStates.includes(game.gameState)? ' ' : dayjs(game.startTimeUTC).tz("America/Toronto").format('MM/DD h:mmA')}</div>
+        <div class="teamHomeDetails"><span class="score">${game.homeTeam.score || '-'}</span></div>
+      </div> `
+    }
+
     return `<html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -10,7 +31,7 @@ const getHockeyTemplate = (game: Game, primaryTeam: Team) => {
       body {
         font-family: "Poppins", Arial, Helvetica, sans-serif;
         background: rgb(22, 22, 22);
-        border: 2px solid ${primaryTeam.color};
+        border: 5px solid ${primaryTeam.color};
         color: #fff;
         max-width: 500px;
         height: fit-content;
@@ -53,17 +74,7 @@ const getHockeyTemplate = (game: Game, primaryTeam: Team) => {
     </style>
   </head>
   <body>
-  <div class="parent">
-    <div class="teamAwayLogo"><img src='${game.awayTeam.logo}' class='logo'></div>
-    <div class="logoSpacer">@</div>
-    <div class="teamHomeLogo"><img src='${game.homeTeam.logo}' class='logo'></div>
-    <div class="teamAwayName">${game.awayTeam.name}</div>
-    <div class="teamNameSpacer"></div>
-    <div class="teamHomeName">${game.homeTeam.name}</div>
-    <div class="teamAwayDetails"><span class="score">${game.awayTeam.score}</span></div>
-    <div class="teamDetailsSpacer"> </div>
-    <div class="teamHomeDetails"><span class="score">${game.homeTeam.score}</span></div>
-  </div> 
+  ${gameScores}
   </body>
 </html>
     `

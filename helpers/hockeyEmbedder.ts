@@ -11,7 +11,7 @@ dayjs.extend(timezone);
 const tz = "America/Toronto";
 
 // Values for game states, used to determine if a score should be shown.
-const gameStates = [
+export const gameStates = [
   'FINAL',
   'LIVE',
   'CRIT',
