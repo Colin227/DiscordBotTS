@@ -17,18 +17,26 @@ export default function embedScore(sched: GameSchedule, teamTriCode: string): Me
 
 const fields = [];
 for (let game of gamesByDate) {
-  let g = game.games[0];
-  let gameDay = dayjs(g.startTimeUTC);
-  let gameLocal = gameDay.tz(tz);
-  let date = gameLocal.format('MM/DD h:mmA')
+  const g = game.games[0];
+  const gameDay = dayjs(g.startTimeUTC);
+  const gameLocal = gameDay.tz(tz);
 
-  fields.push({name: `${g.awayTeam.name} @ ${g.homeTeam.name}`, value: `${date}`})
+  let gameValue = "";
+
+  const date = gameLocal.format('MM/DD h:mmA')
+
+  if (g.gameState === 'FINAL') {
+    gameValue = `${g.awayTeam.score} - ${g.homeTeam.score}`;
+  } else {
+    gameValue = date;
+  }
+
+  fields.push({name: `${g.awayTeam.name} @ ${g.homeTeam.name}`, value: `${gameValue}`})
 }
 
     const embed = new MessageEmbed()
     .setColor('#00205B')
-    .setTitle("Schedule")
-    .setDescription("Upcoming Schedule")
+    .setTitle(`${teamTriCode} Schedule`)
     .setThumbnail(`attachment://${teamTriCode}_light.png`)
     .addFields(fields)
     return embed;
