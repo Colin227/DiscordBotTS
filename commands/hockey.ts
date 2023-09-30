@@ -1,8 +1,9 @@
 import { SlashCommandBuilder } from "@discordjs/builders";
-import { CommandInteraction } from "discord.js";
-import getGames from "../helpers/getHockey";
+import { CommandInteraction, MessageAttachment } from "discord.js";
+import getGames, { getTeam } from "../helpers/getHockey";
 import { GameSchedule } from "../data/_interfaces";
 import hockeyEmbedder from "../helpers/hockeyEmbedder";
+import teamEmbedder from "../helpers/teamEmbedder";
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -15,11 +16,19 @@ module.exports = {
         ),
     async execute(interaction: CommandInteraction) {
         const team = interaction.options.getString('team');
-        console.log("team: ", team)
+        const teamStr = team.trim().toLowerCase();
         await interaction.deferReply();
+        
         try {
-            const score = await getGames(team.trim().toLowerCase()) as GameSchedule;
-            await interaction.editReply({ embeds: [hockeyEmbedder(score)] })
+            // Get the team data based on the user provided tricode.
+            const t = getTeam(teamStr);
+            // Get the current game schedule
+            // TODO: Unsure how the NHL api will handle this once preseason is over. Does the api return every game in the season? 
+            const score = await getGames(t.triCode) as GameSchedule;
+            // Get the team logo from stored assets.
+            const teamFile = new MessageAttachment(`../Discordjs/assets/teams/${t.triCode}_light.png`);
+
+            await interaction.editReply({ embeds: [hockeyEmbedder(score, t.triCode)], files: [teamFile] })
         } catch (e) {
             await interaction.editReply("Error getting game data, try again later.");
         }
