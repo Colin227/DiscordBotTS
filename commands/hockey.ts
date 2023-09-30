@@ -33,7 +33,7 @@ module.exports = {
             const chromiumPath = await chromium.executablePath();
 
             const hockeyImg = await nodeHtmlToImage({
-                html: getHockeyTemplate(score.gamesByDate[0].games[0]),
+                html: getHockeyTemplate(score.gamesByDate[0].games[0], t),
                 puppeteer: puppeteer,
                 puppeteerArgs: {
                     args: chromium.args,
@@ -42,7 +42,7 @@ module.exports = {
                 encoding: 'binary'
             }) as Buffer;
             
-            const imgAttachment = new MessageAttachment(hockeyImg, 'TOR.jpeg');
+            const imgAttachment = new MessageAttachment(hockeyImg, `${t.triCode}_scoreboard.jpeg`);
             // const scoreboardAttachment = new MessageAttachment( scoreboardImg)
             await interaction.editReply({ embeds: [hockeyEmbedder(score, t)], files: [teamFile, imgAttachment]})
             // await interaction.editReply()

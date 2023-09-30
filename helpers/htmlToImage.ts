@@ -1,6 +1,6 @@
-import { Game } from "../data/_interfaces";
+import { Game, Team } from "../data/_interfaces";
 
-const getHockeyTemplate = (game: Game) => {
+const getHockeyTemplate = (game: Game, primaryTeam: Team) => {
     return `<html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -10,13 +10,14 @@ const getHockeyTemplate = (game: Game) => {
       body {
         font-family: "Poppins", Arial, Helvetica, sans-serif;
         background: rgb(22, 22, 22);
+        border: 2px solid ${primaryTeam.color};
         color: #fff;
         max-width: 500px;
         height: fit-content;
       }
       .parent {
         display: grid;
-        grid-template-columns: repeat(5, 1fr);
+        grid-template-columns: 0.5fr 0.5fr 0.5fr 0.5fr 0.5fr;
         grid-template-rows: repeat(5, 1fr);
         grid-column-gap: 0px;
         grid-row-gap: 0px;
@@ -25,7 +26,7 @@ const getHockeyTemplate = (game: Game) => {
         .teamAwayLogo { grid-area: 1 / 1 / 3 / 3; }
         .logoSpacer { 
             grid-area: 1 / 3 / 3 / 4; 
-            font-size: 50px;
+            font-size: 3fr;
             font-weight: 700;
         }
         .teamHomeLogo { grid-area: 1 / 4 / 3 / 6; }
@@ -45,7 +46,7 @@ const getHockeyTemplate = (game: Game) => {
             font-weight: 900;
         }
         .logo {
-            max-width: 150px;
+            max-width: 100px;
             padding: 10px;
         }
         
