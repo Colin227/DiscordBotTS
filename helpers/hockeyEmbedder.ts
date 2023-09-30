@@ -24,7 +24,7 @@ export default function embedScore(sched: GameSchedule, team: Team): MessageEmbe
 } = sched;
 
 const fields = [];
-for (let game of gamesByDate) {
+for (const [i, game] of gamesByDate.entries()) {
   const g = game.games[0];
   const gameDay = dayjs(g.startTimeUTC);
   const gameLocal = gameDay.tz(tz);
@@ -39,7 +39,12 @@ for (let game of gamesByDate) {
     gameValue = date;
   }
 
-  fields.push({name: `${g.awayTeam.name} @ ${g.homeTeam.name}`, value: `${gameValue}`})
+  fields.push({name: `${g.awayTeam.abbrev} @ ${g.homeTeam.abbrev}`, value: `${gameValue}`, inline: true})
+  
+  // Add spacing after every 3 inline fields. Second condition ensures no extra spacing at end.
+  if (fields.filter(field => field.inline).length % 3 === 0 && i+1 !== gamesByDate.length ) {
+    fields.push({ name: '\u200B', value: '\u200B', inline: false });
+  }
 }
 
     const embed = new MessageEmbed()

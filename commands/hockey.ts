@@ -3,7 +3,10 @@ import { CommandInteraction, MessageAttachment } from "discord.js";
 import getGames, { getTeam } from "../helpers/getHockey";
 import { GameSchedule } from "../data/_interfaces";
 import hockeyEmbedder from "../helpers/hockeyEmbedder";
-import teamEmbedder from "../helpers/teamEmbedder";
+import nodeHtmlToImage from "node-html-to-image";
+import puppeteer from "puppeteer-core";
+import chromium from "@sparticuz/chromium";
+import getHockeyTemplate from "../helpers/htmlToImage";
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -27,10 +30,24 @@ module.exports = {
             const score = await getGames(t.triCode) as GameSchedule;
             // Get the team logo from stored assets.
             const teamFile = new MessageAttachment(`../Discordjs/assets/teams/${t.triCode}_light.png`);
+            const chromiumPath = await chromium.executablePath();
 
-            await interaction.editReply({ embeds: [hockeyEmbedder(score, t)], files: [teamFile] })
+            const hockeyImg = await nodeHtmlToImage({
+                html: getHockeyTemplate(score.gamesByDate[0].games[0]),
+                puppeteer: puppeteer,
+                puppeteerArgs: {
+                    args: chromium.args,
+                    executablePath: chromiumPath
+                  },
+                encoding: 'binary'
+            }) as Buffer;
+            
+            const imgAttachment = new MessageAttachment(hockeyImg, 'TOR.jpeg');
+            // const scoreboardAttachment = new MessageAttachment( scoreboardImg)
+            await interaction.editReply({ embeds: [hockeyEmbedder(score, t)], files: [teamFile, imgAttachment]})
+            // await interaction.editReply()
         } catch (e) {
-            await interaction.editReply("Error getting game data, try again later.");
+            await interaction.editReply(`Error getting game data, try again later. ${e}`);
         }
     }
 }
