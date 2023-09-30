@@ -10,7 +10,7 @@ dayjs.extend(timezone);
 
 const tz = "America/Toronto";
 
-export default function embedScore(sched: GameSchedule): MessageEmbed {
+export default function embedScore(sched: GameSchedule, teamTriCode: string): MessageEmbed {
   const { 
     gamesByDate,
 } = sched;
@@ -29,6 +29,7 @@ for (let game of gamesByDate) {
     .setColor('#00205B')
     .setTitle("Schedule")
     .setDescription("Upcoming Schedule")
+    .setThumbnail(`attachment://${teamTriCode}_light.png`)
     .addFields(fields)
     return embed;
 }

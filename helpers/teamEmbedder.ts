@@ -1,4 +1,4 @@
-import { MessageEmbed } from "discord.js";
+import { MessageEmbed, MessageAttachment } from "discord.js";
 import { GameSchedule, Team } from "../data/_interfaces";
 // // import dayjs from "dayjs";
 // import utc from 'dayjs/plugin/utc';
@@ -29,9 +29,9 @@ export default function embedTeam(team: Team): MessageEmbed {
     .setColor('#00205B')
     .setTitle("Team")
     .setDescription(`team: ${team.fullName}`)
+    .setThumbnail(`attachment://${team.triCode}_light.png`)
     .addFields([
         {name: "hello", value: "world"},
     ])
-    .setImage('../assets/teams/.svg')
     return embed;
 }
