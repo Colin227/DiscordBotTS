@@ -2,4 +2,3 @@ node_modules/
 .env
 data/users.json
 dist/
-assets/teams/
