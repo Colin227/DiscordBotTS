@@ -10,6 +10,7 @@ export interface Team {
     leagueId:    number;
     rawTricode:  string;
     triCode:     string;
+    color:       string;
 }
 
 
