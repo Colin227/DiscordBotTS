@@ -19,7 +19,7 @@ const getHockeyTemplate = (games: Game[], primaryTeam: Team) => {
     <div class="teamNameSpacer"></div>
     <div class="teamHomeName">${game.homeTeam.abbrev}</div>
     <div class="teamAwayDetails"><span class="score">${game.awayTeam.score || ''}</span></div>
-    <div class="teamDetailsSpacer">${gameStates.includes(game.gameState) ? ' ' : dayjs(game.startTimeUTC).tz("America/Toronto").format('MM/DD h:mmA')}</div>
+    <div class="teamDetailsSpacer">${gameStates.includes(game.gameState) ? game.gameState : dayjs(game.startTimeUTC).tz("America/Toronto").format('MM/DD h:mmA')}</div>
     <div class="teamHomeDetails"><span class="score">${game.homeTeam.score || ''}</span></div>
   </div>`
   }
@@ -62,6 +62,7 @@ const getHockeyTemplate = (games: Game[], primaryTeam: Team) => {
         .teamAwayDetails { grid-area: 4 / 1 / 6 / 3; }
         .teamDetailsSpacer { 
           grid-area: 4 / 3 / 6 / 4;
+          text-align: center;
         }
         .teamHomeDetails { grid-area: 4 / 4 / 6 / 6; }
         .parent > * {
