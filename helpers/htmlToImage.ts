@@ -19,7 +19,7 @@ const getHockeyTemplate = (games: Game[], primaryTeam: Team) => {
     <div class="teamNameSpacer"></div>
     <div class="teamHomeName">${game.homeTeam.abbrev}</div>
     <div class="teamAwayDetails"><span class="score">${game.awayTeam.score || ''}</span></div>
-    <div class="teamDetailsSpacer">${gameStates.includes(game.gameState) ? game.gameState : dayjs(game.startTimeUTC).tz("America/Toronto").format('MM/DD h:mmA')}</div>
+    <div class="teamDetailsSpacer">${gameStates.includes(game.gameState) ? game.gameState : dayjs(game.startTimeUTC).tz("America/Toronto").format('MMM DD h:mmA')}</div>
     <div class="teamHomeDetails"><span class="score">${game.homeTeam.score || ''}</span></div>
   </div>`
   }
