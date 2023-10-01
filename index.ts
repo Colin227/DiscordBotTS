@@ -1,17 +1,11 @@
-import { REST } from '@discordjs/rest';
-import { Client, ClientOptions, Collection, EmbedFieldData, GuildMember, Intents, MessageActionRow, MessageButton, MessageEmbed, BaseCommandInteraction } from 'discord.js';
+import { Intents } from 'discord.js';
 import dotenv from 'dotenv';
 import getWeather from './commands/_commands/getWeather';
-// const { getWeather } = require('./commands/getWeather');
 import getLocation from './helpers/getLocation';
 import Weather from './data/weather';
-import createEmbedMessage from './helpers/embedMessage';
 import embedWeather from './helpers/weatherEmbedder';
-import Stock from './data/stock';
 import getStock from './commands/getStock';
 import embedStock from './helpers/stockEmbedder';
-import goodMorning from './commands/goodMorning';
-import morningMessage from './helpers/getMorningMessage';
 import getHelp from './commands/_commands/getHelp';
 import fs from 'node:fs';
 import path from 'node:path';
@@ -92,20 +86,6 @@ client.on('interactionCreate', async interaction => {
         } catch (e) {
             console.log(e);
             await interaction.reply(`An error occurred: ${stock} was not found. Contact your local Mat Langer for assistance.`);
-        }
-    } else if (commandName === 'goodmorning') {
-        try {
-            let guild = await client.guilds.fetch(process.env.channel_id);
-            let guildMember = await guild.members.fetch(interaction.user);
-            let nickname = guildMember?.nickname || interaction.user;
-            let weather: Weather = await (goodMorning(getLocation(interaction.user)));
-            
-
-            let resp = morningMessage(weather, nickname);
-            await interaction.reply(resp);
-        } catch (e) {
-            console.log(e);
-            await interaction.reply(`An error occurred: contact Mat Langer for support. ${e.message}`);
         }
     } else if (commandName === 'help') {
         try {
