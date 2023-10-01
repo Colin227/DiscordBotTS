@@ -3,6 +3,8 @@ import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
 import { Game, Team } from "../data/_interfaces";
 import { gameStates } from "./hockeyEmbedder";
+import Weather from "../data/weather";
+import { User } from "discord.js";
 dayjs.extend(utc);
 dayjs.extend(timezone);
 
@@ -91,4 +93,166 @@ const getHockeyTemplate = (games: Game[], primaryTeam: Team) => {
     `
 }
 
-export default getHockeyTemplate;
+
+const getMorningTemplate = (weather: Weather, user: string) => {
+  const weatherCardStyle = `@import url(https://fonts.googleapis.com/css?family=Roboto:400,300);
+  html,
+  body {
+    background-color: #f3f3f3;
+    font-family: "Roboto", sans-serif;
+  }
+  .card {
+    margin: 0 auto;
+    margin-top: 5%;
+    padding: 5px 30px;
+    width: 290px;
+    height: 470px;
+    border-radius: 3px;
+    background-color: #fff;
+    box-shadow: 1px 2px 10px rgba(0, 0, 0, 0.2);
+  };
+  h1,
+  h2,
+  h3,
+  h4 {
+    position: relative;
+  }
+  
+  h1 {
+    float: right;
+    color: #666;
+    font-weight: 300;
+    font-size: 6.59375em;
+    line-height: 0.2em;
+  }
+  
+  h2 {
+    font-weight: 300;
+    font-size: 2.25em;
+  }
+  
+  h3 {
+    float: left;
+    margin-right: 33px;
+    color: #777;
+    font-weight: 400;
+    font-size: 1em;
+  }
+  
+  .measurements {
+    margin-left: 24px;
+    color: #999;
+    font-weight: 300;
+  }
+  
+  .sky {
+      position: relative;
+      margin-top: 108px;
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      background-color: #03A9F4;
+      display: flex;
+      justify-content; center;
+      align-items; center;
+  }
+
+  
+  table {
+      position: relative;
+      top: 10px;
+      width: 100%;
+      text-align: center;
+  }
+  
+  tr:nth-child(1) td:nth-child(1),
+  tr:nth-child(1) td:nth-child(2),
+  tr:nth-child(1) td:nth-child(3),
+  tr:nth-child(1) td:nth-child(4),
+  tr:nth-child(1) td:nth-child(5) {
+      padding-bottom: 32px;
+      -webkit-animation: up 2s cubic-bezier(.39, 0, .38, 1) .7s;
+  }
+  
+  tr:nth-child(2) td:nth-child(1),
+  tr:nth-child(2) td:nth-child(2),
+  tr:nth-child(2) td:nth-child(3),
+  tr:nth-child(2) td:nth-child(4),
+  tr:nth-child(2) td:nth-child(5) {
+      padding-bottom: 7px;
+      -webkit-animation: up 2s cubic-bezier(.39, 0, .38, 1) .9s;
+  }
+  
+  tr:nth-child(3) td:nth-child(1),
+  tr:nth-child(3) td:nth-child(2),
+  tr:nth-child(3) td:nth-child(3),
+  tr:nth-child(3) td:nth-child(4),
+  tr:nth-child(3) td:nth-child(5) {
+      padding-bottom: 7px;
+      -webkit-animation: up 2s cubic-bezier(.39, 0, .38, 1) .9s;
+  }
+  
+  tr:nth-child(2),
+  tr:nth-child(3) {
+      font-size: .9em;
+  }
+  
+  tr:nth-child(3) {
+      color: #999;
+  }
+  
+  tr:nth-child(2),
+  tr:nth-child(3) {
+      font-size: .9em;
+  }
+  
+  tr:nth-child(3) {
+      color: #999;
+  }`;
+
+  let forecastDays = ``;
+  let forecastHigh = ``;
+  let forecastLow = ``;
+
+  for (const f of weather.forecast.forecastday) {
+    forecastDays += `<td>${dayjs(f.date).format('ddd').toUpperCase()}</td>`;
+    forecastHigh += `<td>${f.day.maxtemp_c}°</td>`;
+    forecastLow += `<td>${f.day.mintemp_c}°</td>`;
+  }
+
+  return `<html lang="en">
+
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <style>
+    ${weatherCardStyle}
+    </style>
+  </head>
+  
+  <body class="card">
+    
+      <h3>Good Morning, ${user}</h3>
+      <h2>${weather.location.name}</h2>
+      <h3>${weather.current.condition.text}<span class="measurements">Precip ${weather.current.precip_mm}mm</span></h3>
+      <h1>23°</h1>
+      <div class="sky"><img src="https:${weather.current.condition.icon}"/></div>
+      <table>
+              <tr>
+                  ${forecastDays}
+              </tr>
+              <tr>
+                  ${forecastHigh}
+              </tr>
+              <tr>
+                  ${forecastLow}
+              </tr>
+          </table>
+  
+  </body>
+  
+  </html>`
+}
+
+export { getHockeyTemplate, getMorningTemplate };
