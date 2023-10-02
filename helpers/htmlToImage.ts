@@ -5,6 +5,7 @@ import { Game, Team } from "../data/_interfaces";
 import { gameStates } from "./hockeyEmbedder";
 import Weather from "../data/weather";
 import { User } from "discord.js";
+import getTimeOfDay from "./getTimeOfDay";
 dayjs.extend(utc);
 dayjs.extend(timezone);
 
@@ -95,6 +96,7 @@ const getHockeyTemplate = (games: Game[], primaryTeam: Team) => {
 
 
 const getMorningTemplate = (weather: Weather, user: string) => {
+  const timeOfDay = getTimeOfDay(dayjs().tz("America/Toronto")); // Get humanized greeting time of day.
   const weatherCardStyle = `@import url(https://fonts.googleapis.com/css?family=Roboto:400,300);
   html,
   body {
@@ -230,7 +232,7 @@ const getMorningTemplate = (weather: Weather, user: string) => {
   
   <body class="card">
     
-      <h3>Good Morning, ${user}</h3>
+      <h3>Good ${timeOfDay}, ${user}</h3>
       <h2>${weather.location.name}</h2>
       <h3>${weather.current.condition.text}<span class="measurements">Precip ${weather.current.precip_mm}mm</span></h3>
       <h1>${weather.current.temp_c}°</h1>
