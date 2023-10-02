@@ -1,14 +1,57 @@
 
+import { SlashCommandBuilder } from '@discordjs/builders';
+import { CommandInteraction, GuildMember, MessageAttachment } from 'discord.js';
 import dotenv from 'dotenv';
+import { APIInteractionGuildMember } from 'discord.js/node_modules/discord-api-types/v9';
+import getWeatherData from '../helpers/getWeatherData';
+import getLocation from '../helpers/getLocation';
+import Weather from '../data/weather';
+import puppeteer from "puppeteer-core";
+import chromium from "@sparticuz/chromium";
+import nodeHtmlToImage from 'node-html-to-image';
+import { getMorningTemplate } from '../helpers/htmlToImage';
 
 dotenv.config();
 
-export default function getMorningMessage<WeatherResponse>(location: string): Promise<WeatherResponse> {
-    return fetch(`http://api.weatherapi.com/v1/forecast.json?key=${process.env.weather_api_token}&q=${location}&days=1&aqi=no&alerts=no`)
-    .then(response => {
-        if (!response.ok) {
-            throw new Error(response.statusText)
+module.exports = {
+    data: new SlashCommandBuilder()
+        .setName('goodmorning')
+        .setDescription('Replies with a good morning message!'),
+    async execute(interaction: CommandInteraction) {
+        await interaction.deferReply();
+        try {
+            const nickname = getNickname(interaction.member);
+            const weather: Weather = await getWeatherData(getLocation(interaction.user));
+            const chromiumPath = await chromium.executablePath();
+            const morningImg = await nodeHtmlToImage({
+                html: getMorningTemplate(weather, nickname),
+                type: 'jpeg',
+                quality: 100,
+                puppeteer: puppeteer,
+                puppeteerArgs: {
+                    args: chromium.args,
+                    executablePath: chromiumPath
+                },
+                encoding: 'binary'
+            }) as Buffer;
+
+            const imgAttachment = new MessageAttachment(morningImg, `morning_${nickname}.jpeg`);
+            await interaction.editReply({ files: [imgAttachment] });
+
+        } catch (e) {
+            console.log(e);
+            await interaction.reply(`An error occurred: contact Mat Langer for support. ${e.message}`);
         }
-        return response.json() as Promise<WeatherResponse>
-    })
+    }
+}
+
+type Mem =
+    | GuildMember
+    | APIInteractionGuildMember;
+
+const getNickname = (member: Mem): string  => {
+    if ("displayName" in member) {
+        return member.displayName;
+    }
+    return member.nick;
 }
