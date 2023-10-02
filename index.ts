@@ -54,7 +54,6 @@ client.on('interactionCreate', async interaction => {
         console.log('caught error in index: ', e);
     }
     
-    console.log(interaction);
 })
 
 client.on('interactionCreate', async interaction => {
