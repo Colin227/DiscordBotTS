@@ -171,7 +171,6 @@ const getMorningTemplate = (weather: Weather, user: string) => {
   tr:nth-child(1) td:nth-child(4),
   tr:nth-child(1) td:nth-child(5) {
       padding-bottom: 32px;
-      -webkit-animation: up 2s cubic-bezier(.39, 0, .38, 1) .7s;
   }
   
   tr:nth-child(2) td:nth-child(1),
@@ -180,7 +179,6 @@ const getMorningTemplate = (weather: Weather, user: string) => {
   tr:nth-child(2) td:nth-child(4),
   tr:nth-child(2) td:nth-child(5) {
       padding-bottom: 7px;
-      -webkit-animation: up 2s cubic-bezier(.39, 0, .38, 1) .9s;
   }
   
   tr:nth-child(3) td:nth-child(1),
@@ -189,7 +187,6 @@ const getMorningTemplate = (weather: Weather, user: string) => {
   tr:nth-child(3) td:nth-child(4),
   tr:nth-child(3) td:nth-child(5) {
       padding-bottom: 7px;
-      -webkit-animation: up 2s cubic-bezier(.39, 0, .38, 1) .9s;
   }
   
   tr:nth-child(2),
@@ -236,7 +233,7 @@ const getMorningTemplate = (weather: Weather, user: string) => {
       <h3>Good Morning, ${user}</h3>
       <h2>${weather.location.name}</h2>
       <h3>${weather.current.condition.text}<span class="measurements">Precip ${weather.current.precip_mm}mm</span></h3>
-      <h1>23°</h1>
+      <h1>${weather.current.temp_c}°</h1>
       <div class="sky"><img src="https:${weather.current.condition.icon}"/></div>
       <table>
               <tr>
