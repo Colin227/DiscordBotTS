@@ -94,7 +94,6 @@ const getHockeyTemplate = (games: Game[], primaryTeam: Team) => {
     `
 }
 
-
 const getMorningTemplate = (weather: Weather, user: string) => {
   const timeOfDay = getTimeOfDay(dayjs().tz("America/Toronto")); // Get humanized greeting time of day.
   const weatherCardStyle = `@import url(https://fonts.googleapis.com/css?family=Roboto:400,300);
