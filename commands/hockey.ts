@@ -22,7 +22,7 @@ module.exports = {
         .setDescription('Replies with hockey game schedule.')
         .addUserOption((option) =>
             option.setName('team')
-                .setDescription('Team abbreviation i.e. "TOR  SEA')
+                .setDescription('Team abbreviation i.e. "TOR" or "SEA"')
                 .setRequired(true)
         ),
     async execute(interaction: CommandInteraction) {
@@ -67,7 +67,7 @@ module.exports = {
 
 const getOutputGames = (games: Game[]) => {            
     const today = dayjs();
-    let outputGames = games.filter((game) => dayjs(game.gameDate).isSameOrBefore(today)).slice(-3);
+    let outputGames = games.filter((game) => dayjs(game.gameDate).isSameOrBefore(today)).slice(-2);
     let nextGame = (games.filter((game) => !dayjs(game.gameDate).isSameOrBefore(today)))[0];
     outputGames.push(nextGame);
     return outputGames;
