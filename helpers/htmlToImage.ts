@@ -21,9 +21,9 @@ const getHockeyTemplate = (games: Game[], primaryTeam: Team) => {
     <div class="teamAwayName">${game.awayTeam.abbrev}</div>
     <div class="teamNameSpacer">${gameStates.includes(game.gameState) ? game.gameState : ' '}</div>
     <div class="teamHomeName">${game.homeTeam.abbrev}</div>
-    <div class="teamAwayDetails"><span class="score">${game.awayTeam.score || ''}</span></div>
+    <div class="teamAwayDetails"><span class="score">${game.awayTeam.score || (gameStates.includes(game.gameState) ? '0' : '')}</span></div>
     <div class="teamDetailsSpacer">${gameStates.includes(game.gameState) ? ' ' : dayjs(game.startTimeUTC).tz("America/Toronto").format('MMM DD h:mmA')}</div>
-    <div class="teamHomeDetails"><span class="score">${game.homeTeam.score || ''}</span></div>
+    <div class="teamHomeDetails"><span class="score">${game.homeTeam.score || (gameStates.includes(game.gameState) ? '0' : '')}</span></div>
   </div>`
   }
 
@@ -233,7 +233,8 @@ const getMorningTemplate = (weather: Weather, user: string) => {
     
       <h3>Good ${timeOfDay}, ${user}</h3>
       <h2>${weather.location.name}</h2>
-      <h3>${weather.current.condition.text}<span class="measurements">Precip ${weather.current.precip_mm}mm</span></h3>
+      <h3>${weather.current.condition.text}<span class="measurements">Precip ${weather.forecast.forecastday[0].day.totalprecip_mm}mm</span></h3>
+
       <h1>${weather.current.temp_c}°</h1>
       <div class="sky"><img src="https:${weather.current.condition.icon}"/></div>
       <table>
