@@ -7,7 +7,8 @@
         "build": "tsc",
         "start": "node ./dist/index.js",
         "redeploy": "pm2 restart index --update-env",
-        "debug": "npm run build && npm run start"
+        "debug": "npm run build && npm run start",
+        "dockerbuild": "sudo docker build . -t colin/discord-bot"
     },
     "author": "Colin Peterson",
     "license": "ISC",
