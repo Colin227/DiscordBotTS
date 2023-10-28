@@ -25,6 +25,6 @@ RUN npm install
 # Bundle app source
 COPY . .
 # EXPOSE 8080
-CMD [ "node", "./dist/index.js" ]
-
+# CMD ["node", "./dist/deploy-commdands.js"]
+CMD [ "npm", "deployStart" ]
 # TODO // Include puppeteer dependencies (chromium?)
