@@ -235,7 +235,7 @@ const getMorningTemplate = (weather: Weather, user: string) => {
       <h2>${weather.location.name}</h2>
       <h3>${weather.current.condition.text}<span class="measurements">Precip ${weather.forecast.forecastday[0].day.totalprecip_mm}mm</span></h3>
 
-      <h1>${weather.current.temp_c}°</h1>
+      <h1>${Math.round(weather.current.temp_c)}°</h1>
       <div class="sky"><img src="https:${weather.current.condition.icon}"/></div>
       <table>
               <tr>
@@ -254,4 +254,67 @@ const getMorningTemplate = (weather: Weather, user: string) => {
   </html>`
 }
 
-export { getHockeyTemplate, getMorningTemplate };
+
+const getForecastTemplate = (weather: Weather, user: string) => {
+
+  let forecastColumns: string = ``;
+
+
+
+  for (const f of weather.forecast.forecastday) {
+    forecastColumns +=
+      `<div class="column">
+    <p>${dayjs(f.date).format('ddd').toUpperCase()}</p>
+    <img src="https:${f.day.condition.icon}">
+    <span>${f.day.avgtemp_c}&deg;C</span>
+    <br>
+    <span>${f.day.condition.text}</span>
+</div>`;
+  }
+  return `<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather Card</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+    <style>
+    @import url(https://fonts.googleapis.com/css?family=Roboto:400,300);
+    html,
+    body {
+      background-color: #f3f3f3;
+      font-family: "Roboto", sans-serif;
+      width: 450px;
+    }</style>
+</head>
+
+<body>
+    <div class="card">
+        <div class="card-content">
+            <div class="media">
+               
+                <div class="media-content">
+                    <p class="title is-4">${weather.location.name}</p>
+                    <p class="subtitle is-6">Weather Forecast</p>
+                </div>
+            </div>
+
+            <div class="content">
+
+                <div class="columns is-mobile">
+                    ${forecastColumns}
+                </div>
+                <br>
+                <time datetime="2016-1-1">${dayjs().tz("America/Toronto").format('hh:mm A - D MMM YYYY')}</time>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>`
+
+}
+
+export { getHockeyTemplate, getMorningTemplate, getForecastTemplate };
