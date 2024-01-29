@@ -1,14 +1,16 @@
-// import { ColorResolvable, MessageEmbed } from "discord.js";
-// import { GameSchedule, Team } from "../data/_interfaces";
-// import dayjs from "dayjs";
-// import utc from 'dayjs/plugin/utc';
-// import timezone from 'dayjs/plugin/timezone';
+import { ColorResolvable, MessageEmbed } from "discord.js";
+import { GameSchedule, Team } from "../data/_interfaces";
+import dayjs from "dayjs";
+import utc from 'dayjs/plugin/utc';
+import timezone from 'dayjs/plugin/timezone';
 
 
-// dayjs.extend(utc);
-// dayjs.extend(timezone);
 
-// const tz = "America/Toronto";
+
+dayjs.extend(utc);
+dayjs.extend(timezone);
+
+const tz = "America/Toronto";
 
 // Values for game states, used to determine if a score should be shown.
 export const gameStates = [
