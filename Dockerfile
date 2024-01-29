@@ -26,5 +26,5 @@ RUN npm install
 COPY . .
 # EXPOSE 8080
 # CMD ["node", "./dist/deploy-commdands.js"]
-CMD [ "npm", "deployStart" ]
+CMD [ "npm", "run", "deployStart" ]
 # TODO // Include puppeteer dependencies (chromium?)

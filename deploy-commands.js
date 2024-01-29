@@ -19,6 +19,7 @@ const commands = [
         new SlashCommandBuilder().setName('server').setDescription('Replies with server info!'),
         new SlashCommandBuilder().setName('user').setDescription('Replies with user info!'),
         new SlashCommandBuilder().setName('weather').setDescription('Replies with weather forecast!'),
+        new SlashCommandBuilder().setName('space').setDescription('Replies with NASA\'s photo of the day.'),
         new SlashCommandBuilder().setName('stock').setDescription('Replies with stock information!').addStringOption(option =>
             option.setName('ticker')
             .setDescription("The stock ticker to send")

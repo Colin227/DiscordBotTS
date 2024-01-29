@@ -1,9 +1,5 @@
 import { Intents } from 'discord.js';
 import dotenv from 'dotenv';
-import getWeather from './commands/_commands/getWeather';
-import getLocation from './helpers/getLocation';
-import Weather from './data/weather';
-import embedWeather from './helpers/weatherEmbedder';
 import getStock from './commands/getStock';
 import embedStock from './helpers/stockEmbedder';
 import getHelp from './commands/_commands/getHelp';
@@ -67,14 +63,6 @@ client.on('interactionCreate', async interaction => {
         await interaction.reply(`Server name: ${interaction.guild?.name}`);
     } else if (commandName === 'user') {
         await interaction.reply(`User info: ${interaction.user}`);
-    } else if (commandName === 'weather') {
-        try {
-            let weather: Weather = await (getWeather(getLocation(interaction.user)));
-            let resp = embedWeather(weather);
-            await interaction.reply({ embeds: [resp] });
-        } catch (e) {
-            await interaction.reply(`An error occurred: ${e.message}`);
-        }
     } else if (commandName === 'stock') {
         const stock = interaction.options.getString('ticker');
         try {
