@@ -26,7 +26,7 @@ const commands = [
             .setRequired(true)),
         new SlashCommandBuilder().setName('hockey').setDescription('Replies with hockey schedule!').addStringOption((option) =>
         option.setName('team')
-            .setDescription('Team abbreviation i.e. "TOR  SEA')
+            .setDescription('Team abbreviation i.e. "TOR" or  "SEA"')
             .setRequired(true)
     ),
         new SlashCommandBuilder().setName('goodmorning').setDescription('Replies with a good morning message!'),
