@@ -30,8 +30,9 @@ const commands = [
             .setRequired(true)
     ),
         new SlashCommandBuilder().setName('goodmorning').setDescription('Replies with a good morning message!'),
-        new SlashCommandBuilder().setName('help').setDescription("Replies with a list of all commands.")
-    ]
+        new SlashCommandBuilder().setName('help').setDescription("Replies with a list of all commands."),
+        new SlashCommandBuilder().setName('f1').setDescription("Replies with Formula 1 information!")
+]
     .map(command => command.toJSON());
 
 const rest = new REST({ version: '9' }).setToken(process.env.api_token);
