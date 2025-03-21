@@ -31,7 +31,22 @@ const commands = [
     ),
         new SlashCommandBuilder().setName('goodmorning').setDescription('Replies with a good morning message!'),
         new SlashCommandBuilder().setName('help').setDescription("Replies with a list of all commands."),
-        new SlashCommandBuilder().setName('f1').setDescription("Replies with Formula 1 information!")
+        new SlashCommandBuilder().setName('f1').setDescription("Replies with Formula 1 information!"),
+        new SlashCommandBuilder().setName('translate').setDescription("Translates text between French and English")
+            .addStringOption((option) =>
+                option.setName('lang')
+                    .setDescription('Desired language to translate to')
+                    .setRequired(true)
+                    .addChoices(
+                        { name: 'English', value: 'en'},
+                        { name: 'French', value: 'fr'}
+                    ))
+            .addStringOption((option) =>
+                option
+                    .setName("text")
+                    .setDescription('Text that should be translated')
+                    .setRequired(true)
+        )
 ]
     .map(command => command.toJSON());
 
