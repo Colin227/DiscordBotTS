@@ -46,6 +46,12 @@ const commands = [
                     .setName("text")
                     .setDescription('Text that should be translated')
                     .setRequired(true)
+        ),
+        new SlashCommandBuilder().setName('ai').setDescription("Local AI request")
+            .addStringOption((option) =>
+                option.setName('prompt')
+                    .setDescription('The prompt to provide the AI')
+                    .setRequired(true)
         )
 ]
     .map(command => command.toJSON());
