@@ -4,7 +4,7 @@ import {
     SlashCommandBuilder,
     TextChannel,
 } from "discord.js";
-import { summarizeWithLocalLLM, formatSummaryForDiscord } from "./summarize";
+import { summarizeWithLocalLLM, formatSummaryForDiscord, SummarizeMode } from "./summarize";
 
 export const summarizeCommand = new SlashCommandBuilder()
     .setName("summarize")
@@ -15,6 +15,15 @@ export const summarizeCommand = new SlashCommandBuilder()
             .setDescription("How many recent messages to include (default 50, max 150)")
             .setMinValue(10)
             .setMaxValue(150)
+            .setRequired(false)
+    )
+    .addStringOption((opt) =>
+        opt
+            .setName('mode')
+            .setDescription('Summarization mode (normal or tea)')
+            .addChoices(
+                { name: 'normal', value: 'normal' },
+                { name: 'tea', value: 'tea' })
             .setRequired(false)
     );
 
@@ -27,6 +36,7 @@ function compactMessageContent(content: string): string {
 
 export async function handleSummarize(interaction: ChatInputCommandInteraction) {
     const count = Math.min(interaction.options.getInteger("count") ?? 50, 150);
+    const mode = interaction.options.getString("mode") as SummarizeMode || "normal";
 
     if (!interaction.channel || !(interaction.channel instanceof TextChannel)) {
         await interaction.reply({ content: "This command only works in text channels.", ephemeral: true });
@@ -65,6 +75,7 @@ export async function handleSummarize(interaction: ChatInputCommandInteraction) 
         const summary = await summarizeWithLocalLLM({
             model: "llama3.1", // change to your local model name
             transcript,
+            mode
         });
 
         const output = formatSummaryForDiscord(summary);
