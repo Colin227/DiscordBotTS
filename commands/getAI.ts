@@ -1,9 +1,7 @@
-import { OllamaResponse, Translate } from '../data/index';
 import dotenv from 'dotenv';
 import { SlashCommandBuilder } from '@discordjs/builders';
-import { CommandInteraction, GuildMember, MessageAttachment } from 'discord.js';
-import { APIInteractionGuildMember } from 'discord.js/node_modules/discord-api-types/v9';
-import getOllama from './_commands/getOllama';
+import { CommandInteraction } from 'discord.js';
+import generateText from './_commands/getPromptResponse';
 
 dotenv.config();
 const validInputPattern = /^[a-zA-Z0-9\s.,!?'"-]*$/; // Only allow specific characters
@@ -24,17 +22,11 @@ module.exports = {
                 await interaction.editReply('An error occurred: Input contains invalid characters. Please only use letters, numbers, and punctuation.');
                 return;
             } else {
-                // Call the stream for getOllama
-                let responseText = '';
-                await getOllama(prompt, (chunk) => {
-                    console.log("adding chunk to responseTextL ", chunk);
-                    responseText += chunk; // Accumulate chunks
-                    // Update reply with accumulated text
-                    interaction.editReply({ content: responseText }).catch(console.error);
-                });
 
-                if (responseText) {
-                    await interaction.editReply({ content: responseText });
+                const text = await generateText(prompt);
+
+                if (text) {
+                    await interaction.editReply({ content: text });
                 }
             }
         } catch (e) {
