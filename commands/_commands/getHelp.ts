@@ -1,16 +1,16 @@
 
 // import dotenv from 'dotenv';
 
-import { MessageEmbed } from "discord.js";
+import { EmbedBuilder } from "discord.js";
 
 // dotenv.config();
 
 export default function getHelp() {
-    const embed = new MessageEmbed()
-    .setColor('#ffe333')
-    .setTitle(`Command List`)
-    .setDescription("List of all currently available commands and their functions.")
-    .addFields(
+    const embed = new EmbedBuilder()
+        .setColor('#ffe333')
+        .setTitle(`Command List`)
+        .setDescription("List of all currently available commands and their functions.")
+        .addFields(
             [
                 {
                     name: `/goodmorning`,
@@ -25,8 +25,8 @@ export default function getHelp() {
                     value: "Returns the current weather forecast."
                 }
             ]
-    )
+        )
     return embed;
 
-   
+
 }

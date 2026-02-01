@@ -1,4 +1,4 @@
-import { ColorResolvable, MessageEmbed } from "discord.js";
+import { EmbedBuilder } from "discord.js";
 import { GameSchedule, Team } from "../data/_interfaces";
 import dayjs from "dayjs";
 import utc from 'dayjs/plugin/utc';
@@ -19,25 +19,25 @@ export const gameStates = [
   'CRIT',
   'OFF'
 ]
-export default function embedScore(sched: GameSchedule): MessageEmbed {
-  const { 
+export default function embedScore(sched: GameSchedule): EmbedBuilder {
+  const {
     gamesByDate,
-} = sched;
+  } = sched;
 
-const fields = [];
-for (let game of gamesByDate) {
-  let g = game.games[0];
-  let gameDay = dayjs(g.startTimeUTC);
-  let gameLocal = gameDay.tz(tz);
-  let date = gameLocal.format('MM/DD h:mmA')
+  const fields = [];
+  for (let game of gamesByDate) {
+    let g = game.games[0];
+    let gameDay = dayjs(g.startTimeUTC);
+    let gameLocal = gameDay.tz(tz);
+    let date = gameLocal.format('MM/DD h:mmA')
 
-  fields.push({name: `${g.awayTeam.name} @ ${g.homeTeam.name}`, value: `${date}`})
-}
+    fields.push({ name: `${g.awayTeam.name} @ ${g.homeTeam.name}`, value: `${date}` })
+  }
 
-    const embed = new MessageEmbed()
+  const embed = new EmbedBuilder()
     .setColor('#00205B')
     .setTitle("Schedule")
     .setDescription("Upcoming Schedule")
     .addFields(fields)
-    return embed;
+  return embed;
 }

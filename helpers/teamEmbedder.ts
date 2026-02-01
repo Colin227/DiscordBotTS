@@ -1,4 +1,4 @@
-import { MessageEmbed, MessageAttachment } from "discord.js";
+import { EmbedBuilder } from "discord.js";
 import { GameSchedule, Team } from "../data/_interfaces";
 // // import dayjs from "dayjs";
 // import utc from 'dayjs/plugin/utc';
@@ -10,28 +10,28 @@ import { GameSchedule, Team } from "../data/_interfaces";
 
 // const tz = "America/Toronto";
 
-export default function embedTeam(team: Team): MessageEmbed {
-//   const { 
-//     gamesByDate,
-// } = sched;
+export default function embedTeam(team: Team): EmbedBuilder {
+    //   const { 
+    //     gamesByDate,
+    // } = sched;
 
-// const fields = [];
-// for (let game of gamesByDate) {
-//   let g = game.games[0];
-//   let gameDay = dayjs(g.startTimeUTC);
-//   let gameLocal = gameDay.tz(tz);
-//   let date = gameLocal.format('MM/DD h:mmA')
+    // const fields = [];
+    // for (let game of gamesByDate) {
+    //   let g = game.games[0];
+    //   let gameDay = dayjs(g.startTimeUTC);
+    //   let gameLocal = gameDay.tz(tz);
+    //   let date = gameLocal.format('MM/DD h:mmA')
 
-//   fields.push({name: `${g.awayTeam.name} @ ${g.homeTeam.name}`, value: `${date}`})
-// }
+    //   fields.push({name: `${g.awayTeam.name} @ ${g.homeTeam.name}`, value: `${date}`})
+    // }
 
-    const embed = new MessageEmbed()
-    .setColor('#00205B')
-    .setTitle("Team")
-    .setDescription(`team: ${team.fullName}`)
-    .setThumbnail(`attachment://${team.triCode}_light.png`)
-    .addFields([
-        {name: "hello", value: "world"},
-    ])
+    const embed = new EmbedBuilder()
+        .setColor('#00205B')
+        .setTitle("Team")
+        .setDescription(`team: ${team.fullName}`)
+        .setThumbnail(`attachment://${team.triCode}_light.png`)
+        .addFields([
+            { name: "hello", value: "world" },
+        ])
     return embed;
 }

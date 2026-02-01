@@ -1,5 +1,5 @@
 import { SlashCommandBuilder } from "@discordjs/builders";
-import { CommandInteraction, MessageAttachment } from "discord.js";
+import { CommandInteraction, AttachmentBuilder } from "discord.js";
 import getGames, { getTeam } from "../helpers/getHockey";
 import { Game, GameSchedule } from "../data/_interfaces";
 import nodeHtmlToImage from "node-html-to-image";
@@ -26,10 +26,11 @@ module.exports = {
                 .setRequired(true)
         ),
     async execute(interaction: CommandInteraction) {
+        if (!interaction.isChatInputCommand()) return;
         const team = interaction.options.getString('team');
         const teamStr = team.trim().toLowerCase();
         await interaction.deferReply();
-        
+
         try {
             // Get the team data based on the user provided tricode.
             const t = getTeam(teamStr);
@@ -50,14 +51,14 @@ module.exports = {
                 puppeteerArgs: {
                     args: chromium.args,
                     executablePath: chromiumPath
-                  },
+                },
                 encoding: 'binary'
             }) as Buffer;
-            
-            const imgAttachment = new MessageAttachment(hockeyImg, `${t.triCode}_scoreboard.jpeg`);
+
+            const imgAttachment = new AttachmentBuilder(hockeyImg, { name: `${t.triCode}_scoreboard.jpeg` });
             // const scoreboardAttachment = new MessageAttachment( scoreboardImg)
             // await interaction.editReply({ embeds: [hockeyEmbedder(score, t)], files: [teamFile, imgAttachment]})
-            await interaction.editReply({ files: [imgAttachment]});
+            await interaction.editReply({ files: [imgAttachment] });
             // await interaction.editReply()
         } catch (e) {
             await interaction.editReply(`Error getting game data, try again later. ${e}`);
@@ -65,7 +66,7 @@ module.exports = {
     }
 }
 
-const getOutputGames = (games: Game[]) => {            
+const getOutputGames = (games: Game[]) => {
     const today = dayjs();
     let outputGames = games.filter((game) => dayjs(game.gameDate).isSameOrBefore(today)).slice(-2);
     let nextGame = (games.filter((game) => !dayjs(game.gameDate).isSameOrBefore(today)))[0];

@@ -1,11 +1,11 @@
 // location and lap times of drivers and what current lap is good
 import { SlashCommandBuilder } from "@discordjs/builders";
-import { CommandInteraction, MessageAttachment, MessageEmbed } from "discord.js";
+import { CommandInteraction, EmbedBuilder } from "discord.js";
 import dotenv from 'dotenv';
 dotenv.config();
 
 const toProperCase = (text: string): string => {
-    return text.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
+    return text.replace(/\w\S*/g, function (txt) { return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase(); });
 };
 
 module.exports = {
@@ -21,10 +21,10 @@ module.exports = {
             const positions = await fetchFormulaOnePositions(sessions[0].session_key);
             const drivers = await fetchFormulaOneDrivers(sessions[0].session_key);
 
-            console.log("positions: ", positions.sort((a, b) => {return a.position - b.position}))
+            console.log("positions: ", positions.sort((a, b) => { return a.position - b.position }))
 
 
-            const top5 = positions.sort((a, b) => {return a.position - b.position}).slice(0, 5);
+            const top5 = positions.sort((a, b) => { return a.position - b.position }).slice(0, 5);
             // console.log("top 5: ", top5)
 
 
@@ -35,14 +35,14 @@ module.exports = {
                     name: `Position ${p.position}`,
                     value: `${toProperCase((driver.full_name))} \n ${driver.team_name}`,
                     inline: false
-                } 
+                }
             })
 
             // console.log("positionFields: ", positionFields)
-            
 
-            const {meeting_name, meeting_official_name, location, country_name} = meeting[0];
-            const f1Embed = new MessageEmbed()
+
+            const { meeting_name, meeting_official_name, location, country_name } = meeting[0];
+            const f1Embed = new EmbedBuilder()
                 .setColor('#FF1801') // TODO: Get colour
                 .setTitle(`${meeting_name}`)
                 .setDescription(`${toProperCase(meeting_official_name)}`)
@@ -54,9 +54,9 @@ module.exports = {
                             inline: false,
                         },
                         ...positionFields
-                        
+
                     ]
-            )
+                )
             // .setImage(nasaPhoto.hd)
 
             await interaction.editReply({ embeds: [f1Embed] });
@@ -203,41 +203,41 @@ interface Meeting {
 }
 
 interface FormulaOnePosition {
-    session_key:   number;
-    meeting_key:   number;
+    session_key: number;
+    meeting_key: number;
     driver_number: number;
-    date:          Date;
-    position:      number;
+    date: Date;
+    position: number;
 }
 
 interface Driver {
-    session_key:    number;
-    meeting_key:    number;
+    session_key: number;
+    meeting_key: number;
     broadcast_name: string;
-    country_code:   null | string;
-    first_name:     null | string;
-    full_name:      string;
-    headshot_url:   null | string;
-    last_name:      null | string;
-    driver_number:  number;
-    team_colour:    number | null | string;
-    team_name:      null | string;
-    name_acronym:   string;
+    country_code: null | string;
+    first_name: null | string;
+    full_name: string;
+    headshot_url: null | string;
+    last_name: null | string;
+    driver_number: number;
+    team_colour: number | null | string;
+    team_name: null | string;
+    name_acronym: string;
 }
 
 interface Session {
-    location:           string;
-    country_key:        number;
-    country_code:       string;
-    country_name:       string;
-    circuit_key:        number;
+    location: string;
+    country_key: number;
+    country_code: string;
+    country_name: string;
+    circuit_key: number;
     circuit_short_name: string;
-    session_type:       string;
-    session_name:       string;
-    date_start:         Date;
-    date_end:           Date;
-    gmt_offset:         string;
-    session_key:        number;
-    meeting_key:        number;
-    year:               number;
+    session_type: string;
+    session_name: string;
+    date_start: Date;
+    date_end: Date;
+    gmt_offset: string;
+    session_key: number;
+    meeting_key: number;
+    year: number;
 }

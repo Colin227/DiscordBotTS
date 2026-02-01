@@ -1,4 +1,4 @@
-import { MessageEmbed } from "discord.js";
+import { EmbedBuilder } from "discord.js";
 import Weather from "../data/weather";
 
 /***
@@ -6,13 +6,13 @@ import Weather from "../data/weather";
  * Take in a weather object and return a message embed object
  * that contains the formatted weather data.
  */
-export default function embedWeather(weather: Weather): MessageEmbed {
-    const embed = new MessageEmbed()
-    .setColor('#ffe333')
-    .setTitle(`${weather.location.name}`)
-    .setDescription("Current Forecast")
-    .setThumbnail(`https:${weather.current.condition.icon}`)
-    .addFields(
+export default function embedWeather(weather: Weather): EmbedBuilder {
+    const embed = new EmbedBuilder()
+        .setColor('#ffe333')
+        .setTitle(`${weather.location.name}`)
+        .setDescription("Current Forecast")
+        .setThumbnail(`https:${weather.current.condition.icon}`)
+        .addFields(
             [
                 {
                     name: `Current Weather`,
@@ -24,6 +24,6 @@ export default function embedWeather(weather: Weather): MessageEmbed {
                     value: `${weather.forecast.forecastday[1].day.avgtemp_c} \u00b0C - ${weather.forecast.forecastday[1].day.condition.text}`
                 }
             ]
-    )
+        )
     return embed;
 }

@@ -8,9 +8,15 @@ const validInputPattern = /^[a-zA-Z0-9\s.,!?'"-]*$/; // Only allow specific char
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('ai')
-        .setDescription('Ask AI a question'),
+        .setDescription('Ask AI a question')
+        .addStringOption(option =>
+            option.setName('prompt')
+                .setDescription('The prompt to send to the AI')
+                .setRequired(true)
+        ),
     async execute(interaction: CommandInteraction) {
         await interaction.deferReply();
+        if (!interaction.isChatInputCommand()) return;
         try {
             const prompt = interaction.options.getString('prompt');
             console.log("received prompt: ", prompt);

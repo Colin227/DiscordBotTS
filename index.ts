@@ -1,4 +1,4 @@
-import { Intents } from 'discord.js';
+import { IntentsBitField } from 'discord.js';
 import dotenv from 'dotenv';
 import getStock from './commands/getStock';
 import embedStock from './helpers/stockEmbedder';
@@ -11,7 +11,7 @@ dotenv.config();
 
 
 // Create a new client instance
-const client = new ClientC({ intents: [Intents.FLAGS.GUILDS] });
+const client = new ClientC({ intents: [IntentsBitField.Flags.Guilds] });
 
 // When the client is ready, run this code (only once)
 client.once('ready', () => {
@@ -38,7 +38,7 @@ client.on('interactionCreate', async interaction => {
 
     const interactionClient = interaction.client as ClientC;
     const command: any = interactionClient.commands.get(interaction.commandName);
-    
+
     if (!command) {
         console.error(`No command matching ${interaction.commandName} was found!`);
         return;
@@ -49,7 +49,7 @@ client.on('interactionCreate', async interaction => {
     } catch (e: any) {
         console.log('caught error in index: ', e);
     }
-    
+
 })
 
 client.on('interactionCreate', async interaction => {
@@ -64,6 +64,7 @@ client.on('interactionCreate', async interaction => {
     } else if (commandName === 'user') {
         await interaction.reply(`User info: ${interaction.user}`);
     } else if (commandName === 'stock') {
+        if (!interaction.isChatInputCommand()) return;
         const stock = interaction.options.getString('ticker');
         try {
             const stockResp: any = await (getStock(stock));
@@ -77,7 +78,7 @@ client.on('interactionCreate', async interaction => {
     } else if (commandName === 'help') {
         try {
             let helpEmbed = getHelp();
-            await interaction.reply({ embeds: [helpEmbed]});
+            await interaction.reply({ embeds: [helpEmbed] });
         } catch (e) {
             console.log(e);
             await interaction.reply(`An error occurred: contact Mat Langer for support.`);

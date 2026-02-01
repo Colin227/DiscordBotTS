@@ -1,8 +1,8 @@
 
 import { SlashCommandBuilder } from '@discordjs/builders';
-import { CommandInteraction, GuildMember, MessageAttachment } from 'discord.js';
+import { CommandInteraction, GuildMember, AttachmentBuilder } from 'discord.js';
 import dotenv from 'dotenv';
-import { APIInteractionGuildMember } from 'discord.js/node_modules/discord-api-types/v9';
+import { APIInteractionGuildMember } from 'discord-api-types/v10';
 import getWeatherData from '../helpers/getWeatherData';
 import getLocation from '../helpers/getLocation';
 import Weather from '../data/weather';
@@ -35,7 +35,7 @@ module.exports = {
                 encoding: 'binary'
             }) as Buffer;
 
-            const imgAttachment = new MessageAttachment(forecastImg, `forecast_${nickname}.jpeg`);
+            const imgAttachment = new AttachmentBuilder(forecastImg, { name: `forecast_${nickname}.jpeg` });
             await interaction.editReply({ files: [imgAttachment] });
 
         } catch (e) {
@@ -49,7 +49,7 @@ type Mem =
     | GuildMember
     | APIInteractionGuildMember;
 
-const getNickname = (member: Mem): string  => {
+const getNickname = (member: Mem): string => {
     if ("displayName" in member) {
         return member.displayName;
     }

@@ -1,5 +1,5 @@
 import { SlashCommandBuilder } from "@discordjs/builders";
-import { CommandInteraction, MessageAttachment, MessageEmbed } from "discord.js";
+import { CommandInteraction, EmbedBuilder } from "discord.js";
 import dotenv from 'dotenv';
 dotenv.config();
 
@@ -9,21 +9,21 @@ module.exports = {
         .setDescription('Astrology photo of the day.'),
     async execute(interaction: CommandInteraction) {
         await interaction.deferReply();
-        
+
         try {
             const nasaPhoto = await getApod();
 
             console.log('nasaPhoto: ', nasaPhoto)
 
             // const apodFields = [];
-  
-            const nasaEmbed = new MessageEmbed()
-                .setColor('DARK_BLUE') // TODO: Get colour
+
+            const nasaEmbed = new EmbedBuilder()
+                .setColor('DarkBlue') // TODO: Get colour
                 .setTitle(`Astronomy Picture of the Day - ${nasaPhoto.date}`)
                 .setDescription(nasaPhoto.explanation)
                 .setImage(nasaPhoto.hdurl)
-            
-            await interaction.editReply({embeds: [nasaEmbed] });
+
+            await interaction.editReply({ embeds: [nasaEmbed] });
         } catch (e) {
             console.log(e);
             await interaction.editReply(`Error getting NASA data, try again later. ${e}`);
@@ -48,12 +48,12 @@ export default function getApod(): Promise<ApodResponse> {
 }
 
 interface ApodResponse {
-	copyright: string;
-	date: string;
-	explanation: string;
-	hdurl: string;
-	media_type: string;
-	service_version: string;
-	title: string;
-	url: string;
+    copyright: string;
+    date: string;
+    explanation: string;
+    hdurl: string;
+    media_type: string;
+    service_version: string;
+    title: string;
+    url: string;
 }

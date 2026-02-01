@@ -1,8 +1,8 @@
-import { MessageEmbed } from "discord.js";
+import { EmbedBuilder } from "discord.js";
 import Stock from "../data/stock";
 
 
-export default function embedStock(stock: Stock): MessageEmbed {
+export default function embedStock(stock: Stock): EmbedBuilder {
     const dailyChange = () => {
         return Math.sign(stock.regularMarketChange) > 0 ? `+${stock.regularMarketChange.toFixed(2)}` : `${stock.regularMarketChange.toFixed(2)}`;
     }
@@ -10,12 +10,12 @@ export default function embedStock(stock: Stock): MessageEmbed {
         return Math.sign(stock.regularMarketChange) > 0 ? "#00AD2A" : "#ff0000";
     }
 
-    const embed = new MessageEmbed()
-    .setColor(stockColor())
-    .setTitle(`${stock.longName}`)
-    .setDescription(`${stock.symbol}`)
-    // .setThumbnail(`https:${weather.current.condition.icon}`)
-    .addFields(
+    const embed = new EmbedBuilder()
+        .setColor(stockColor())
+        .setTitle(`${stock.longName}`)
+        .setDescription(`${stock.symbol}`)
+        // .setThumbnail(`https:${weather.current.condition.icon}`)
+        .addFields(
             [
                 {
                     name: `Current Price`,
@@ -40,7 +40,7 @@ export default function embedStock(stock: Stock): MessageEmbed {
 
 
             ]
-    )
+        )
     return embed;
 }
 
